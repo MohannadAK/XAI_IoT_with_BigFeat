@@ -7,10 +7,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 from tensorflow import keras
+
 import shap
 
 # Load your dataset
-df = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+df = pd.read_csv('../Datasets/mems_dataset.csv')
 
 # Assuming the columns in your CSV are named 'x', 'y', 'z', and 'label'
 X = df[['x', 'y', 'z']]

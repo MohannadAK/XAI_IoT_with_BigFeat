@@ -13,7 +13,7 @@ from tabulate import tabulate
 
 # Load your dataset (replace 'your_dataset.csv' with your actual dataset file)
 # Assuming your dataset is in CSV format with columns 'x', 'y', 'z', and 'label'
-dataset = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+dataset = pd.read_csv('../Datasets/mems_dataset.csv')
 
 # Extract features (X) and labels (y)
 X = dataset[['x', 'y', 'z']].values
@@ -23,12 +23,12 @@ y = dataset['label'].values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Bagging
-bagging_classifier = BaggingClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100, random_state=42)
+bagging_classifier = BaggingClassifier(estimator=DecisionTreeClassifier(), n_estimators=100, random_state=42)
 bagging_classifier.fit(X_train, y_train)
 bagging_pred = bagging_classifier.predict(X_test)
 
 # AdaBoost
-adaboost_classifier = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(max_depth=1), n_estimators=100, random_state=42)
+adaboost_classifier = AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1), n_estimators=100, random_state=42)
 adaboost_classifier.fit(X_train, y_train)
 adaboost_pred = adaboost_classifier.predict(X_test)
 
@@ -88,7 +88,7 @@ def evaluate_and_report(y_true, y_pred, ensemble_name):
     # Save the table as a JPG file
     plt.savefig(f'{ensemble_name}_metrics.jpg', bbox_inches='tight', pad_inches=0.1)
     plt.close()
-    
+
     # print(f"Metrics for {ensemble_name}:")
     # print(f"Accuracy: {accuracy:.2f}")
     # print("Classification Report:")
@@ -96,7 +96,7 @@ def evaluate_and_report(y_true, y_pred, ensemble_name):
     # print("Confusion Matrix:")
     # print(conf_matrix)
     # print("\n")
-    
+
     # Save the confusion matrix as a JPG file
     plt.figure(figsize=(8, 6))
     plt.imshow(conf_matrix, interpolation='nearest', cmap=plt.cm.Blues)
