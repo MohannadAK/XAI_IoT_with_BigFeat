@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.inspection import permutation_importance
 
 # Load dataset
-data = pd.read_csv('mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Extract the features (x, y, z) and labels
 X = data[['x', 'y', 'z']]

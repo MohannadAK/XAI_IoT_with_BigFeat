@@ -18,15 +18,15 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 # List of 9 CSV files
 csv_files = [
-    'device1_top_20_features.csv',
-    'device2_top_20_features.csv',
-    'device3_top_20_features.csv',
-    'device4_top_20_features.csv',
-    'device5_top_20_features.csv',
-    'device6_top_20_features.csv',
-    'device7_top_20_features.csv',
-    'device8_top_20_features.csv',
-    'device9_top_20_features.csv'
+    '../Datasets/IOT Top 20 features datasets/device1_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device2_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device3_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device4_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device5_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device6_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device7_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device8_top_20_features.csv',
+    '../Datasets/IOT Top 20 features datasets/device9_top_20_features.csv'
 ]
 
 for i, csv_file in enumerate(csv_files):
@@ -46,7 +46,7 @@ for i, csv_file in enumerate(csv_files):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Bagging
-    bagging_classifier = BaggingClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100, random_state=42)
+    bagging_classifier = BaggingClassifier(estimator=DecisionTreeClassifier(), n_estimators=100, random_state=42)
     bagging_classifier.fit(X_train, y_train)
     bagging_pred = bagging_classifier.predict(X_test)
 
@@ -70,33 +70,36 @@ for i, csv_file in enumerate(csv_files):
 
     # Calculate performance metrics for Bagging
     accuracy_bagging = accuracy_score(y_test, bagging_pred)
-    precision_bagging = precision_score(y_test, bagging_pred, average='weighted')
+    precision_bagging = precision_score(y_test, bagging_pred, average='weighted', zero_division=0)
     recall_bagging = recall_score(y_test, bagging_pred, average='weighted')
     f1_bagging = f1_score(y_test, bagging_pred, average='weighted')
 
     # Calculate performance metrics for Stacking
     accuracy_stacking = accuracy_score(y_test, stacking_pred)
-    precision_stacking = precision_score(y_test, stacking_pred, average='weighted')
+    precision_stacking = precision_score(y_test, stacking_pred, average='weighted', zero_division=0)
     recall_stacking = recall_score(y_test, stacking_pred, average='weighted')
     f1_stacking = f1_score(y_test, stacking_pred, average='weighted')
 
     # Calculate performance metrics for Voting
     accuracy_voting = accuracy_score(y_test, voting_pred)
-    precision_voting = precision_score(y_test, voting_pred, average='weighted')
+    precision_voting = precision_score(y_test, voting_pred, average='weighted', zero_division=0)
     recall_voting = recall_score(y_test, voting_pred, average='weighted')
     f1_voting = f1_score(y_test, voting_pred, average='weighted')
 
     # Calculate performance metrics for Blending
     accuracy_blending = accuracy_score(y_test, blend_pred)
-    precision_blending = precision_score(y_test, blend_pred, average='weighted')
+    precision_blending = precision_score(y_test, blend_pred, average='weighted', zero_division=0)
     recall_blending = recall_score(y_test, blend_pred, average='weighted')
     f1_blending = f1_score(y_test, blend_pred, average='weighted')
 
-    # Append metrics to the DataFrame
-    metrics_df = metrics_df.append({'Model': 'Bagging', 'Accuracy': accuracy_bagging, 'Precision': precision_bagging, 'Recall': recall_bagging, 'F1 Score': f1_bagging}, ignore_index=True)
-    metrics_df = metrics_df.append({'Model': 'Stacking', 'Accuracy': accuracy_stacking, 'Precision': precision_stacking, 'Recall': recall_stacking, 'F1 Score': f1_stacking}, ignore_index=True)
-    metrics_df = metrics_df.append({'Model': 'Voting', 'Accuracy': accuracy_voting, 'Precision': precision_voting, 'Recall': recall_voting, 'F1 Score': f1_voting}, ignore_index=True)
-    metrics_df = metrics_df.append({'Model': 'Blending', 'Accuracy': accuracy_blending, 'Precision': precision_blending, 'Recall': recall_blending, 'F1 Score': f1_blending}, ignore_index=True)
+    # Append metrics to the DataFrame using pd.concat
+    metrics_df = pd.concat([
+        metrics_df,
+        pd.DataFrame([{'Model': 'Bagging', 'Accuracy': accuracy_bagging, 'Precision': precision_bagging, 'Recall': recall_bagging, 'F1 Score': f1_bagging}]),
+        pd.DataFrame([{'Model': 'Stacking', 'Accuracy': accuracy_stacking, 'Precision': precision_stacking, 'Recall': recall_stacking, 'F1 Score': f1_stacking}]),
+        pd.DataFrame([{'Model': 'Voting', 'Accuracy': accuracy_voting, 'Precision': precision_voting, 'Recall': recall_voting, 'F1 Score': f1_voting}]),
+        pd.DataFrame([{'Model': 'Blending', 'Accuracy': accuracy_blending, 'Precision': precision_blending, 'Recall': recall_blending, 'F1 Score': f1_blending}])
+    ], ignore_index=True)
 
     # Create a table image using matplotlib
     plt.figure(figsize=(10, 6))

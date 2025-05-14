@@ -8,7 +8,7 @@ from sklearn.impute import SimpleImputer
 from tabulate import tabulate
 
 # Load the MEMS dataset
-mems_data = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+mems_data = pd.read_csv('../Datasets/mems_dataset.csv')
 
 # Data Cleaning
 imputer = SimpleImputer(strategy='mean')

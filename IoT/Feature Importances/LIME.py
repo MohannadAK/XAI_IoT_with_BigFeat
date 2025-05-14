@@ -12,15 +12,15 @@ import numpy as np
 
 # List of 9 CSV files
 csv_files = [
-    # 'week8/top20_datasets/device1_top_20_features.csv',
-    # 'week8/top20_datasets/device2_top_20_features.csv',
-    # 'week8/top20_datasets/device3_top_20_features.csv',
-    'week8/top20_datasets/device4_top_20_features.csv',
-    'week8/top20_datasets/device5_top_20_features.csv',
-    'week8/top20_datasets/device6_top_20_features.csv',
-    'week8/top20_datasets/device7_top_20_features.csv',
-    'week8/top20_datasets/device8_top_20_features.csv',
-    'week8/top20_datasets/device9_top_20_features.csv'
+    # '../../Datasets/IOT Top 20 features datasets/device1_top_20_features.csv',
+    # '../../Datasets/IOT Top 20 features datasets/device2_top_20_features.csv',
+    # '../../Datasets/IOT Top 20 features datasets/device3_top_20_features.csv',
+    '../../Datasets/IOT Top 20 features datasets/device4_top_20_features.csv',
+    '../../Datasets/IOT Top 20 features datasets/device5_top_20_features.csv',
+    '../../Datasets/IOT Top 20 features datasets/device6_top_20_features.csv',
+    '../../Datasets/IOT Top 20 features datasets/device7_top_20_features.csv',
+    '../../Datasets/IOT Top 20 features datasets/device8_top_20_features.csv',
+    '../../Datasets/IOT Top 20 features datasets/device9_top_20_features.csv'
 ]
 
 # Loop through each CSV file
@@ -40,7 +40,7 @@ for i, csv_file in enumerate(csv_files, start=3):
     # Define models
     random_forest_model = RandomForestClassifier()
     decision_tree_model = DecisionTreeClassifier()
-    ada_model = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100)
+    ada_model = AdaBoostClassifier(estimator=DecisionTreeClassifier(), n_estimators=100)
 
     # Fit models to the training data
     random_forest_model.fit(X_train, y_train)

@@ -10,7 +10,7 @@ from sklearn.neural_network import MLPClassifier
 import shap
 
 # Load your dataset
-data = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Split the data into features (X) and labels (y)
 X = data[['x', 'y', 'z']]

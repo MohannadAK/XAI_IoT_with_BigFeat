@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.inspection import permutation_importance
 
 # Load your dataset
-data = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Assuming your dataset has columns 'x', 'y', 'z', and 'labels'
 X = data[['x', 'y', 'z']]

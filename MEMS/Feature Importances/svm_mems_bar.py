@@ -4,7 +4,7 @@ from sklearn.svm import SVC
 import numpy as np
 
 # Load dataset
-data = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Separate features (x, y, z) and labels
 X = data[['x', 'y', 'z']]
@@ -29,4 +29,5 @@ def save_feature_importance_plot(feature_importances, title, filename):
     plt.savefig(filename)
     plt.close()
 
-save_feature_importance_plot(svm_feature_importances, 'SVM Feature Importances', 'svm_mems_bar_feature_importance.jpg')
+save_feature_importance_plot(svm_feature_importances, 'SVM Feature Importances',
+                             '../../Results/MEMS/Feature_Importance/svm_mems_bar_feature_importance.jpg')

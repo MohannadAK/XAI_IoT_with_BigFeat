@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.neural_network import MLPClassifier
 
 # Prioritize the local BigFeat package
-bigfeat_path = r'D:\BigFeat'  # Parent directory of bigfeat package
+bigfeat_path = r'/mnt/Projects/BigFeat'  # Parent directory of bigfeat package
 sys.path.insert(0, bigfeat_path)  # Insert at start of sys.path to override site-packages
 
 # Import BigFeat

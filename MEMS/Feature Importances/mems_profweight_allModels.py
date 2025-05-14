@@ -8,7 +8,7 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 
 # Load your dataset from "mems_dataset.csv"
-df = pd.read_csv("xai_week1/datasets/mems_dataset.csv")
+df = pd.read_csv("../../Datasets/mems_dataset.csv")
 
 X = df[['x', 'y', 'z']]
 y = df['label']

@@ -9,7 +9,7 @@ from sklearn.neural_network import MLPClassifier
 import numpy as np
 
 # Load dataset
-data = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Separate features (x, y, z) and labels
 X = data[['x', 'y', 'z']]
@@ -21,7 +21,7 @@ decision_tree_model = DecisionTreeClassifier()
 logistic_regression_model = LogisticRegression(max_iter=10000)
 # svm_model = SVC(probability=True)  # Use probability=True for feature importances with SVM
 # mlp_model = MLPClassifier(max_iter=1000)
-ada_model = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100)
+ada_model = AdaBoostClassifier(estimator=DecisionTreeClassifier(), n_estimators=100)
 
 # Fit models to the data
 random_forest_model.fit(X, y)
@@ -49,8 +49,11 @@ def save_feature_importance_plot(feature_importances, title, filename):
     plt.savefig(filename)
     plt.close()
 
-save_feature_importance_plot(random_forest_feature_importances, 'Random Forest Feature Importances', 'random_forest_feature_importance.jpg')
-save_feature_importance_plot(decision_tree_feature_importances, 'Decision Tree Feature Importances', 'decision_tree_feature_importance.jpg')
+save_feature_importance_plot(random_forest_feature_importances, 'Random Forest Feature Importances',
+                             '../../Results/MEMS/Feature_Importance/random_forest_feature_importance.jpg')
+save_feature_importance_plot(decision_tree_feature_importances, 'Decision Tree Feature Importances',
+                             '../../Results/MEMS/Feature_Importance/decision_tree_feature_importance.jpg')
 # save_feature_importance_plot(svm_feature_importances, 'SVM Feature Importances', 'svm_feature_importance.jpg')
 # save_feature_importance_plot(mlp_feature_importances, 'MLP Feature Importances', 'mlp_feature_importance.jpg')
-save_feature_importance_plot(ada_feature_importances, 'AdaBoost Feature Importances', 'ada_feature_importance.jpg')
+save_feature_importance_plot(ada_feature_importances, 'AdaBoost Feature Importances',
+                             '../../Results/MEMS/Feature_Importance/ada_feature_importance.jpg')

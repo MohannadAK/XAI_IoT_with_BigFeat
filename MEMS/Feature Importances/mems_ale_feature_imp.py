@@ -14,7 +14,7 @@ from reportlab.pdfgen import canvas
 from fpdf import FPDF
 
 # Load dataset
-data = pd.read_csv('mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Split your data into training and testing sets:
 X = data[['x', 'y', 'z']]  # Features 'x', 'y', 'z'
@@ -83,5 +83,5 @@ for feature_name in features_to_plot:
     pdf.image(f'ale_{feature_name}_plot.jpg', x=10, y=None, w=190)
 
 # Save the PDF report
-pdf_filename = 'piezo_ale_report.pdf'
+pdf_filename = '../../Results/MEMS/Feature_Importance/piezo_ale_report.pdf'
 pdf.output(pdf_filename)

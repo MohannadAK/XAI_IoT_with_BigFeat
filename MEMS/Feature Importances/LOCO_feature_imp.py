@@ -6,7 +6,7 @@ from copy import deepcopy
 import matplotlib.pyplot as plt
 
 # Load your dataset from the CSV file
-data = pd.read_csv("xai_week1/datasets/mems_dataset.csv")
+data = pd.read_csv("../../Datasets/mems_dataset.csv")
 
 # Separate features (X) and labels (y)
 X = data[["x", "y", "z"]]

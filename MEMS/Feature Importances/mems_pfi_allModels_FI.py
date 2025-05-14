@@ -10,7 +10,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.inspection import permutation_importance
 
 # Load your dataset
-data = pd.read_csv('xai_week1/datasets/mems_dataset.csv')
+data = pd.read_csv('../../Datasets/mems_dataset.csv')
 
 # Split the data into features (X) and labels (y)
 X = data[['x', 'y', 'z']]
@@ -29,7 +29,7 @@ models = {
 }
 
 # Initialize a directory to store PFI summary plots
-pfi_plot_dir = 'mems_pfi_plots/'
+pfi_plot_dir = '../../Results/MEMS/Feature_Importance/mems_pfi_plots/'
 
 # Ensure the directory exists
 import os
