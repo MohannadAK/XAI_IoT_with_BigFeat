@@ -32,7 +32,7 @@ models = {
     'Deep Neural Network': MLPClassifier(random_state=42, max_iter=500)
 }
 
-shap_plot_dir = 'mems_shap_plots/'
+shap_plot_dir = '../../Results/MEMS/Feature_Importance/mems_shap_plots/'
 
 # Ensure the directory exists
 os.makedirs(shap_plot_dir, exist_ok=True)
