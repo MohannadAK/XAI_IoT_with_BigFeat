@@ -1,0 +1,16 @@
+Feature_Name,SHAP_Value,Feature_Type,Rank
+HH_L1_weight,0.01686971844034812,Original,1
+HH_L3_magnitude,0.01546305547876039,Original,2
+HH_L5_magnitude,0.014773599144991283,Original,3
+HH_L5_weight,0.01398236878890468,Original,4
+BigFeat_Gen_4,0.013111892277601109,BigFeat_Generated,5
+BigFeat_Gen_0,0.012315486762677469,BigFeat_Generated,6
+HH_L3_weight,0.011704068827513393,Original,7
+HH_L1_magnitude,0.011459177854357874,Original,8
+BigFeat_Gen_1,0.010555564501459771,BigFeat_Generated,9
+HH_L1_mean,0.010104855143419453,Original,10
+BigFeat_Gen_5,0.00876991220027812,BigFeat_Generated,11
+BigFeat_Gen_3,0.008147067214202764,BigFeat_Generated,12
+HH_L3_mean,0.007927826354534671,Original,13
+HH_L5_mean,0.007813875114232769,Original,14
+HH_L1_radius,0.007269230767281682,Original,15

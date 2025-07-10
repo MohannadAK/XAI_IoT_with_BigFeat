@@ -89,7 +89,7 @@ tpot_config = {
 
 print("TPOT Configuration: Limited to ExtraTreesClassifier only")
 
-DEVICE_START_INDEX = 2
+DEVICE_START_INDEX = 1
 
 csv_files = [
     os.path.join(BASE_DIR, '..', '..', 'Datasets', 'IOT Top 20 features datasets', f'device{i}_top_20_features.csv')
@@ -432,9 +432,10 @@ def safe_array_conversion(value):
 
 
 def save_scenario_shap_visualization(shap_values, feature_names, model_name, original_indices,
-                                     X_sample, device_name, output_dir, scenario_num, feature_color_map):
+                                    X_sample, device_name, output_dir, scenario_num, feature_color_map):
     """
     Save SHAP visualization for a single scenario with improved error handling
+    Outputs: JPG, PDF, and CSV files for feature importance
     """
     if shap_values is None or feature_names is None:
         print(f"Skipping visualization for {model_name} (Scenario {scenario_num}) due to missing data")
@@ -458,6 +459,20 @@ def save_scenario_shap_visualization(shap_values, feature_names, model_name, ori
 
         # Assign colors
         sorted_colors = [feature_color_map.get(feature, '#87CEEB') for feature in sorted_features]
+
+        # Create DataFrame for CSV
+        results_df = pd.DataFrame({
+            'Feature_Name': sorted_features,
+            'SHAP_Value': sorted_values,
+            'Feature_Type': ['Original' if 'BigFeat' not in feature else 'BigFeat_Generated' for feature in sorted_features],
+            'Rank': range(1, len(sorted_features) + 1)
+        })
+
+        # Save CSV
+        csv_file = os.path.join(output_dir,
+                                f"{device_name}_{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_scenario{scenario_num}_shap_results.csv")
+        results_df.to_csv(csv_file, index=False)
+        print(f"SHAP results CSV for {model_name} (Scenario {scenario_num}) saved to {csv_file}")
 
         # Create plot
         plt.figure(figsize=(12, 10))
@@ -486,25 +501,37 @@ def save_scenario_shap_visualization(shap_values, feature_names, model_name, ori
             plt.legend(handles=legend_elements, loc='lower right', fontsize=10)
 
         plt.tight_layout()
-        importance_file = os.path.join(output_dir,
-                                       f"{device_name}_{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_scenario{scenario_num}_shap_importance.jpg")
-        plt.savefig(importance_file, dpi=300, bbox_inches='tight')
+
+        # Save JPG
+        jpg_file = os.path.join(output_dir,
+                                f"{device_name}_{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_scenario{scenario_num}_shap_importance.jpg")
+        plt.savefig(jpg_file, dpi=300, bbox_inches='tight')
+        print(f"SHAP importance JPG for {model_name} (Scenario {scenario_num}) saved to {jpg_file}")
+
+        # Save PDF
+        from matplotlib.backends.backend_pdf import PdfPages
+        pdf_file = os.path.join(output_dir,
+                                f"{device_name}_{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_scenario{scenario_num}_shap_importance.pdf")
+        with PdfPages(pdf_file) as pdf:
+            pdf.savefig(plt.gcf(), bbox_inches='tight')
+        print(f"SHAP importance PDF for {model_name} (Scenario {scenario_num}) saved to {pdf_file}")
+
         plt.close()
-        print(f"SHAP importance plot for {model_name} (Scenario {scenario_num}) saved to {importance_file}")
 
     except Exception as e:
-        print(f"Error creating SHAP importance plot for {model_name}: {str(e)}")
-
+        print(f"Error creating SHAP visualization for {model_name}: {str(e)}")
 
 def create_shap_comparison_visualization(shap_data_list, feature_names_list, model_names,
-                                         original_indices_list, X_samples_list, device_name, output_dir,
-                                         feature_color_map):
+                                        original_indices_list, X_samples_list, device_name, output_dir,
+                                        feature_color_map):
     """
     Create comprehensive SHAP comparison visualization with improved error handling
+    Outputs: JPG, PDF, and CSV files for feature importance comparison
     """
     try:
         fig, axes = plt.subplots(2, 2, figsize=(24, 20))
         axes = axes.ravel()
+        comparison_data = []
 
         for idx, (shap_values, feature_names, model_name, original_indices) in enumerate(
                 zip(shap_data_list, feature_names_list, model_names, original_indices_list)):
@@ -531,6 +558,16 @@ def create_shap_comparison_visualization(shap_data_list, feature_names_list, mod
                 sorted_indices = np.argsort(mean_shap)[::-1][:n_features_to_show]
                 sorted_features = [processed_feature_names[i] for i in sorted_indices]
                 sorted_values = [float(mean_shap[i]) for i in sorted_indices]
+
+                # Store data for CSV
+                for feature, value in zip(sorted_features, sorted_values):
+                    comparison_data.append({
+                        'Model': model_name,
+                        'Feature': feature,
+                        'SHAP_Value': value,
+                        'Feature_Type': 'Original' if 'BigFeat' not in feature else 'BigFeat_Generated',
+                        'Rank': sorted_features.index(feature) + 1
+                    })
 
                 # Assign colors
                 sorted_colors = [feature_color_map.get(feature, '#87CEEB') for feature in sorted_features]
@@ -568,10 +605,27 @@ def create_shap_comparison_visualization(shap_data_list, feature_names_list, mod
 
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.05)
-        comparison_file = os.path.join(output_dir, f"{device_name}_shap_feature_importance_comparison.jpg")
-        plt.savefig(comparison_file, dpi=300, bbox_inches='tight')
+
+        # Save JPG
+        jpg_file = os.path.join(output_dir, f"{device_name}_shap_feature_importance_comparison.jpg")
+        plt.savefig(jpg_file, dpi=300, bbox_inches='tight')
+        print(f"SHAP feature importance comparison JPG saved to {jpg_file}")
+
+        # Save PDF
+        from matplotlib.backends.backend_pdf import PdfPages
+        pdf_file = os.path.join(output_dir, f"{device_name}_shap_feature_importance_comparison.pdf")
+        with PdfPages(pdf_file) as pdf:
+            pdf.savefig(plt.gcf(), bbox_inches='tight')
+        print(f"SHAP feature importance comparison PDF saved to {pdf_file}")
+
         plt.close()
-        print(f"SHAP feature importance comparison saved to {comparison_file}")
+
+        # Save CSV
+        if comparison_data:
+            comparison_df = pd.DataFrame(comparison_data)
+            csv_file = os.path.join(output_dir, f"{device_name}_shap_feature_importance_comparison.csv")
+            comparison_df.to_csv(csv_file, index=False)
+            print(f"SHAP feature importance comparison CSV saved to {csv_file}")
 
     except Exception as e:
         print(f"Error creating comparison visualization: {str(e)}")
