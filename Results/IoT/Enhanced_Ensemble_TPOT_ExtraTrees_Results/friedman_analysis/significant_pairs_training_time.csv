@@ -1,0 +1,4 @@
+Condition_1,Condition_2,P_value,Significant,Better_Condition,Rank_Diff
+ExtraTrees_Original,TPOT_Original,0.0007274514658602849,Yes,ExtraTrees_Original,2.3333333333333335
+ExtraTrees_Original,TPOT_BigFeat,6.946518460870799e-05,Yes,ExtraTrees_Original,2.6666666666666665
+ExtraTrees_BigFeat,TPOT_BigFeat,0.03136402213809786,Yes,ExtraTrees_BigFeat,1.6666666666666665
