@@ -1,2 +1,2 @@
-,accuracy,f1_score
-TPOT_Original,0.6386818181818181,0.6357632664382209
+,accuracy,precision_macro,recall_macro,f1_macro,precision_micro,recall_micro,f1_micro,precision_weighted,recall_weighted,f1_weighted,roc_auc_macro,pr_auc_macro,fpr_macro,fnr_macro
+TPOT_Original,0.6435,0.7998549484726535,0.6435000000000001,0.6412782566965474,0.6435,0.6435,0.6435,0.7998549484726533,0.6435,0.6412782566965474,0.9093586598484849,0.646306923515417,0.03565,0.3565

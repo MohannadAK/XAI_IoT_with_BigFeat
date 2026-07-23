@@ -1,2 +1,2 @@
-,accuracy,f1_score
-ExtraTrees_Original,0.7161136363636363,0.7008656856786727
+,accuracy,precision_macro,recall_macro,f1_macro,precision_micro,recall_micro,f1_micro,precision_weighted,recall_weighted,f1_weighted,roc_auc_macro,pr_auc_macro,fpr_macro,fnr_macro
+ExtraTrees_Original,0.7145,0.8066748155781901,0.7145,0.6995654371558371,0.7145,0.7145,0.7145,0.8066748155781902,0.7145,0.699565437155837,0.9385436672979798,0.7167373864626728,0.02855,0.2855

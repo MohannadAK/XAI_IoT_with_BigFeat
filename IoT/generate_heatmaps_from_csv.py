@@ -6,7 +6,7 @@ import os
 import glob
 
 def recreate_heatmaps():
-    results_dir = '/home/victoryst/projects/tmp/XAI_IoT_with_BigFeat/Results/IoT/Feature_Importance/SHAP_Feature_Importance_Analysis'
+    results_dir = '/home/victoryst/personal/dev/XAI_IoT_with_BigFeat/Results/IoT/Feature_Importance/SHAP_Feature_Importance_Analysis'
     csv_files = glob.glob(os.path.join(results_dir, '*_shap_feature_importance_comparison.csv'))
     
     if not csv_files:

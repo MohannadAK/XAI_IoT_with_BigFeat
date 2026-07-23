@@ -25,9 +25,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.exceptions import ConvergenceWarning
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score, average_precision_score, confusion_matrix
+from sklearn.preprocessing import LabelBinarizer
 from sklearn.pipeline import Pipeline
 from tpot import TPOTClassifier
+from tpot.old_config_utils import convert_config_dict_to_choicepipeline
 import shap
 
 # Filter warnings
@@ -132,9 +134,9 @@ def generate_bigfeat_features_with_mapping(X, y, original_feature_names):
         bigfeat = BigFeat(task_type='classification')
         X_bigfeat = bigfeat.fit(
             X_np, y_np,
-            gen_size=5,
+            gen_size=10,      # k=10 batch generation factor (paper §Experimental Setup)
             random_state=42,
-            iterations=3,
+            iterations=10,    # Option B: 7→10 gives more feature generation cycles
             estimator='rf',
             feat_imps=True,
             check_corr=True,
@@ -177,6 +179,41 @@ def generate_bigfeat_features_with_mapping(X, y, original_feature_names):
     print(f"Original features preserved: {n_original}")
     print(f"Total features: {X_bigfeat_transformed.shape[1]}")
 
+    def get_formula(depth, op_ls_copy, id_ls_copy, feature_names):
+        if depth == 0:
+            feat_ind = id_ls_copy.pop()
+            return feature_names[feat_ind]
+        depth -= 1
+        op = op_ls_copy.pop()[0]
+        op_name = getattr(op, '__name__', str(op))
+        if op_name in ['multiply', 'add', 'subtract']:
+            feat_1 = get_formula(depth, op_ls_copy, id_ls_copy, feature_names)
+            feat_2 = get_formula(depth, op_ls_copy, id_ls_copy, feature_names)
+            if op_name == 'multiply': return f'({feat_2} * {feat_1})'
+            elif op_name == 'add': return f'({feat_2} + {feat_1})'
+            elif op_name == 'subtract': return f'({feat_2} - {feat_1})'
+        else:
+            feat_1 = get_formula(depth, op_ls_copy, id_ls_copy, feature_names)
+            if op_name == 'original_feat': return feat_1
+            elif op_name == 'square': return f'({feat_1}^2)'
+            elif op_name == 'absolute' or op_name == 'abs': return f'abs({feat_1})'
+            else: return f'{op_name}({feat_1})'
+
+    if hasattr(bigfeat, 'tracking_ids') and hasattr(bigfeat, 'tracking_ops') and hasattr(bigfeat, 'feat_depths'):
+        print("\n" + "="*50)
+        print("BigFeat Generated Features Mathematical Formulas:")
+        print("="*50)
+        for i in range(len(bigfeat.tracking_ids)):
+            try:
+                op_ls = bigfeat.tracking_ops[i].copy()
+                id_ls = bigfeat.tracking_ids[i].copy()
+                depth = bigfeat.feat_depths[i]
+                formula = get_formula(depth, op_ls, id_ls, original_feature_names)
+                print(f"BigFeat_Gen_{i}: {formula}")
+            except Exception as e:
+                print(f"BigFeat_Gen_{i}: [Formula could not be reconstructed: {e}]")
+        print("="*50 + "\n")
+
     return X_bigfeat_transformed, feature_names, original_indices, bigfeat
 
 
@@ -184,7 +221,7 @@ def train_extratrees_model(X, y, random_state=42):
     """Train ExtraTreesClassifier model"""
     print("Training ExtraTreesClassifier...")
     model = ExtraTreesClassifier(
-        n_estimators=100,
+        n_estimators=300,     # Option A: 100→300 reduces ensemble variance ~42%
         random_state=random_state,
         n_jobs=-1,
         max_depth=None,
@@ -202,10 +239,10 @@ def train_tpot_model(X, y, random_state=42):
     """
     print("Training TPOT model (ExtraTreesClassifier only)...")
 
-    # Reduced configuration for more stable training
+    # Option A: aligned n_estimators search space to include 300 (matches ET baseline)
     tpot_config = {
         'sklearn.ensemble.ExtraTreesClassifier': {
-            'n_estimators': [50, 100],
+            'n_estimators': [100, 200, 300],   # Option A: was [50, 100]
             'criterion': ['gini', 'entropy'],
             'max_features': ['sqrt', 'log2'],
             'min_samples_split': [2, 5, 10],
@@ -217,17 +254,17 @@ def train_tpot_model(X, y, random_state=42):
 
     try:
         tpot_classifier = TPOTClassifier(
-            config_dict=tpot_config,
-            generations=3,  # Reduced for faster training
-            population_size=8,  # Reduced for faster training
-            verbosity=1,
+            search_space=convert_config_dict_to_choicepipeline(tpot_config),
+            generations=8,          # 8 generations as reported in paper
+            population_size=15,     # population=15 as reported in paper
+            verbose=1,
             random_state=random_state,
             n_jobs=1,  # Use single job to avoid issues
-            scoring='f1_weighted',
-            cv=3,
-            max_time_mins=3,  # Reduced time limit
-            max_eval_time_mins=1,
-            early_stop=2
+            scorers=['f1_weighted'],
+            cv=3,                   # 3-fold CV as reported in paper
+            max_time_mins=None,     # No time cap 
+            max_eval_time_mins=None,# No evaluation time cap
+            early_stop=5            # More patient early stopping
         )
         tpot_classifier.fit(X, y)
         print("TPOT model training completed!")
@@ -279,14 +316,14 @@ def compute_shap_values(model, X, feature_names, model_name, max_samples=500):
         if isinstance(actual_model, ExtraTreesClassifier):
             try:
                 # First attempt with tree_path_dependent (more stable than interventional)
-                explainer = shap.TreeExplainer(actual_model, feature_perturbation='tree_path_dependent', check_additivity=False)
-                shap_values = explainer.shap_values(X_sample)
+                explainer = shap.TreeExplainer(actual_model, feature_perturbation='tree_path_dependent')
+                shap_values = explainer.shap_values(X_sample, check_additivity=False)
             except Exception as tree_error:
                 print(f"TreeExplainer with tree_path_dependent failed: {str(tree_error)}")
                 try:
                     # Second attempt with no feature perturbation and additivity check disabled
-                    explainer = shap.TreeExplainer(actual_model, check_additivity=False)
-                    shap_values = explainer.shap_values(X_sample)
+                    explainer = shap.TreeExplainer(actual_model)
+                    shap_values = explainer.shap_values(X_sample, check_additivity=False)
                 except Exception as tree_error2:
                     print(f"TreeExplainer with default settings failed: {str(tree_error2)}")
                     # Fallback to KernelExplainer
@@ -733,34 +770,126 @@ def create_original_features_comparison(shap_data_list, feature_names_list, mode
 
 def save_scenario_performance(performance, model_name, device_name, output_dir, scenario_num):
     """
-    Save performance metrics for a single scenario to CSV
+    Save comprehensive performance metrics for a single scenario to CSV
     """
     try:
-        performance_df = pd.DataFrame({
-            'accuracy': [performance['accuracy']],
-            'f1_score': [performance['f1_score']]
-        }, index=[model_name])
-        performance_file = os.path.join(output_dir,
-                                        f"{device_name}_{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_scenario{scenario_num}_performance.csv")
-        performance_df.to_csv(performance_file)
-        print(f"Performance metrics for {model_name} (Scenario {scenario_num}) saved to {performance_file}")
+        model_name_safe = model_name.replace(' ', '_').replace('(', '').replace(')', '')
+        
+        # Save Scalar Metrics
+        scalar_df = pd.DataFrame([performance['scalar']], index=[model_name])
+        performance_file = os.path.join(output_dir, f"{device_name}_{model_name_safe}_scenario{scenario_num}_performance.csv")
+        scalar_df.to_csv(performance_file)
+        
+        # Save Per-Class Metrics
+        if not performance['per_class'].empty:
+            per_class_file = os.path.join(output_dir, f"{device_name}_{model_name_safe}_scenario{scenario_num}_per_class_metrics.csv")
+            performance['per_class'].to_csv(per_class_file, index=False)
+            
+        # Save Confusion Matrix
+        if not performance['confusion_matrix'].empty:
+            cm_file = os.path.join(output_dir, f"{device_name}_{model_name_safe}_scenario{scenario_num}_confusion_matrix.csv")
+            performance['confusion_matrix'].to_csv(cm_file)
+            
+        print(f"Comprehensive metrics for {model_name} (Scenario {scenario_num}) saved.")
     except Exception as e:
         print(f"Error saving performance for {model_name} (Scenario {scenario_num}): {str(e)}")
 
 
 def evaluate_model_performance(model, X_test, y_test, model_name):
-    """Evaluate model performance"""
+    """Evaluate model performance comprehensively"""
     try:
         y_pred = model.predict(X_test)
+
+        # Handle TPOT LabelEncoder bug
+        if hasattr(model, 'label_encoder_') and model.label_encoder_ is not None:
+            y_test_unq = np.unique(y_test)
+            y_pred_unq = np.unique(y_pred)
+            if 0 in y_pred_unq and 0 not in y_test_unq:
+                try:
+                    y_pred = model.label_encoder_.inverse_transform(y_pred)
+                except Exception as e:
+                    print(f"Warning: Could not inverse transform labels for {model_name}: {e}")
+
+        # Basic metrics
         accuracy = accuracy_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred, average='weighted')
+        
+        metrics = {'accuracy': accuracy}
+        
+        for avg in ['macro', 'micro', 'weighted']:
+            metrics[f'precision_{avg}'] = precision_score(y_test, y_pred, average=avg, zero_division=0)
+            metrics[f'recall_{avg}'] = recall_score(y_test, y_pred, average=avg, zero_division=0)
+            metrics[f'f1_{avg}'] = f1_score(y_test, y_pred, average=avg, zero_division=0)
+            
+        # Probabilistic metrics
+        try:
+            if hasattr(model, 'predict_proba'):
+                y_pred_proba = model.predict_proba(X_test)
+                labels = model.classes_ if hasattr(model, 'classes_') else np.unique(y_test)
+                
+                lb = LabelBinarizer()
+                lb.fit(labels)
+                y_test_bin = lb.transform(y_test)
+                
+                if len(labels) > 2:
+                    metrics['roc_auc_macro'] = roc_auc_score(y_test, y_pred_proba, multi_class='ovr', average='macro', labels=labels)
+                    metrics['pr_auc_macro'] = average_precision_score(y_test_bin, y_pred_proba, average='macro')
+                else:
+                    pos_proba = y_pred_proba[:, 1] if y_pred_proba.shape[1] > 1 else y_pred_proba
+                    metrics['roc_auc_macro'] = roc_auc_score(y_test, pos_proba)
+                    metrics['pr_auc_macro'] = average_precision_score(y_test, pos_proba)
+            else:
+                metrics['roc_auc_macro'] = np.nan
+                metrics['pr_auc_macro'] = np.nan
+        except Exception as e:
+            print(f"Warning: Could not calculate probability-based metrics for {model_name}: {e}")
+            metrics['roc_auc_macro'] = np.nan
+            metrics['pr_auc_macro'] = np.nan
+
+        # Confusion Matrix and Per-class metrics
+        labels_unique = np.unique(y_test)
+        cm = confusion_matrix(y_test, y_pred, labels=labels_unique)
+        
+        FP = cm.sum(axis=0) - np.diag(cm)  
+        FN = cm.sum(axis=1) - np.diag(cm)
+        TP = np.diag(cm)
+        TN = cm.sum() - (FP + FN + TP)
+        
+        FPR = np.divide(FP, (FP + TN), out=np.zeros_like(FP, dtype=float), where=(FP + TN) != 0)
+        FNR = np.divide(FN, (FN + TP), out=np.zeros_like(FN, dtype=float), where=(FN + TP) != 0)
+        
+        metrics['fpr_macro'] = np.mean(FPR)
+        metrics['fnr_macro'] = np.mean(FNR)
+
+        per_class_df = pd.DataFrame({
+            'Class': labels_unique,
+            'Precision': precision_score(y_test, y_pred, labels=labels_unique, average=None, zero_division=0),
+            'Recall': recall_score(y_test, y_pred, labels=labels_unique, average=None, zero_division=0),
+            'F1': f1_score(y_test, y_pred, labels=labels_unique, average=None, zero_division=0),
+            'FPR': FPR,
+            'FNR': FNR,
+            'TP': TP,
+            'FP': FP,
+            'FN': FN,
+            'TN': TN
+        })
+        
+        cm_df = pd.DataFrame(cm, index=[f"True_{lbl}" for lbl in labels_unique], columns=[f"Pred_{lbl}" for lbl in labels_unique])
+
         print(f"{model_name} Performance:")
         print(f"  Accuracy: {accuracy:.4f}")
-        print(f"  F1 Score (weighted): {f1:.4f}")
-        return {'accuracy': accuracy, 'f1_score': f1}
+        print(f"  F1 Score (weighted): {metrics['f1_weighted']:.4f}")
+        print(f"  ROC-AUC (macro): {metrics['roc_auc_macro']:.4f}")
+        
+        return {'scalar': metrics, 'per_class': per_class_df, 'confusion_matrix': cm_df}
     except Exception as e:
         print(f"Error evaluating {model_name}: {str(e)}")
-        return {'accuracy': 0, 'f1_score': 0}
+        fallback_metrics = {
+            'accuracy': 0, 'precision_macro': 0, 'precision_micro': 0, 'precision_weighted': 0,
+            'recall_macro': 0, 'recall_micro': 0, 'recall_weighted': 0,
+            'f1_macro': 0, 'f1_micro': 0, 'f1_weighted': 0,
+            'roc_auc_macro': 0, 'pr_auc_macro': 0, 'fpr_macro': 0, 'fnr_macro': 0
+        }
+        return {'scalar': fallback_metrics, 'per_class': pd.DataFrame(), 'confusion_matrix': pd.DataFrame()}
 
 
 def analyze_device_shap(csv_file, device_name):
@@ -793,7 +922,7 @@ def analyze_device_shap(csv_file, device_name):
         X_scaled = scaler.fit_transform(X)
         X_scaled_df = pd.DataFrame(X_scaled, columns=original_feature_names)
         X_train, X_test, y_train, y_test = train_test_split(
-            X_scaled_df, y, test_size=0.2, random_state=42, stratify=y
+            X_scaled_df, y, test_size=0.3, random_state=42, stratify=y  # 70/30 split as stated in paper
         )
         print(f"Train set: {X_train.shape}, Test set: {X_test.shape}")
 
@@ -804,6 +933,14 @@ def analyze_device_shap(csv_file, device_name):
         all_original_indices = []
         all_X_samples = []
         all_performance = []
+
+        fallback_metrics = {
+            'accuracy': 0, 'precision_macro': 0, 'precision_micro': 0, 'precision_weighted': 0,
+            'recall_macro': 0, 'recall_micro': 0, 'recall_weighted': 0,
+            'f1_macro': 0, 'f1_micro': 0, 'f1_weighted': 0,
+            'roc_auc_macro': 0, 'pr_auc_macro': 0, 'fpr_macro': 0, 'fnr_macro': 0
+        }
+        fallback_performance = {'scalar': fallback_metrics, 'per_class': pd.DataFrame(), 'confusion_matrix': pd.DataFrame()}
 
         # ========== SCENARIO 1: ExtraTrees with Original Features ==========
         print(f"\n{'=' * 60}")
@@ -837,7 +974,7 @@ def analyze_device_shap(csv_file, device_name):
             all_model_names.append("ExtraTrees Original")
             all_original_indices.append(None)
             all_X_samples.append(None)
-            all_performance.append({'accuracy': 0, 'f1_score': 0})
+            all_performance.append(fallback_performance)
 
         # ========== SCENARIO 2: ExtraTrees with BigFeat Features ==========
         print(f"\n{'=' * 60}")
@@ -883,7 +1020,7 @@ def analyze_device_shap(csv_file, device_name):
                     all_model_names.append("ExtraTrees BigFeat")
                     all_original_indices.append(None)
                     all_X_samples.append(None)
-                    all_performance.append({'accuracy': 0, 'f1_score': 0})
+                    all_performance.append(fallback_performance)
 
             except Exception as e:
                 print(f"Error in Scenario 2: {str(e)}")
@@ -892,7 +1029,7 @@ def analyze_device_shap(csv_file, device_name):
                 all_model_names.append("ExtraTrees BigFeat")
                 all_original_indices.append(None)
                 all_X_samples.append(None)
-                all_performance.append({'accuracy': 0, 'f1_score': 0})
+                all_performance.append(fallback_performance)
         else:
             print("BigFeat not available, skipping Scenario 2")
             all_shap_data.append(None)
@@ -900,7 +1037,7 @@ def analyze_device_shap(csv_file, device_name):
             all_model_names.append("ExtraTrees BigFeat")
             all_original_indices.append(None)
             all_X_samples.append(None)
-            all_performance.append({'accuracy': 0, 'f1_score': 0})
+            all_performance.append(fallback_performance)
 
         # ========== SCENARIO 3: TPOT with Original Features ==========
         print(f"\n{'=' * 60}")
@@ -936,7 +1073,7 @@ def analyze_device_shap(csv_file, device_name):
             all_model_names.append("TPOT Original")
             all_original_indices.append(None)
             all_X_samples.append(None)
-            all_performance.append({'accuracy': 0, 'f1_score': 0})
+            all_performance.append(fallback_performance)
 
         # ========== SCENARIO 4: TPOT with BigFeat Features ==========
         print(f"\n{'=' * 60}")
@@ -975,7 +1112,7 @@ def analyze_device_shap(csv_file, device_name):
                 all_model_names.append("TPOT BigFeat")
                 all_original_indices.append(None)
                 all_X_samples.append(None)
-                all_performance.append({'accuracy': 0, 'f1_score': 0})
+                all_performance.append(fallback_performance)
         else:
             print("BigFeat not available or failed, skipping Scenario 4")
             all_shap_data.append(None)
@@ -983,7 +1120,7 @@ def analyze_device_shap(csv_file, device_name):
             all_model_names.append("TPOT BigFeat")
             all_original_indices.append(None)
             all_X_samples.append(None)
-            all_performance.append({'accuracy': 0, 'f1_score': 0})
+            all_performance.append(fallback_performance)
 
         # ========== CREATE COMPREHENSIVE COMPARISON ==========
         print(f"\n{'=' * 60}")
@@ -997,8 +1134,10 @@ def analyze_device_shap(csv_file, device_name):
             )
 
             # Save comprehensive performance comparison
-            performance_comparison_df = pd.DataFrame(all_performance, index=all_model_names)
+            scalar_performances = [p['scalar'] for p in all_performance]
+            performance_comparison_df = pd.DataFrame(scalar_performances, index=all_model_names)
             performance_comparison_file = os.path.join(output_dir, f"{device_name}_performance_comparison.csv")
+            performance_comparison_df.index.name = 'Model'
             performance_comparison_df.to_csv(performance_comparison_file)
             print(f"Performance comparison saved to {performance_comparison_file}")
 
