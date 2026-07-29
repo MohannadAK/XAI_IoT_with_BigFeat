@@ -113,24 +113,15 @@ def plot_cd_diagram(avg_ranks, labels, cd, title, filename, colors):
     ax.text(1.0 + cd / 2, 1.72, f'CD = {cd:.2f}', ha='center',
             va='bottom', fontsize=9, color='dimgray', style='italic')
 
-    # Draw cliques (groups not significantly different)
-    pairs_ns = []
-    for i in range(k):
-        for j in range(i + 1, k):
-            if abs(sorted_ranks[i] - sorted_ranks[j]) < cd:
-                pairs_ns.append((i, j))
-
-    # Merge overlapping pairs into clique bars
+    # Find maximal cliques (groups not significantly different)
     cliques = []
-    for (i, j) in pairs_ns:
-        merged = False
-        for c in cliques:
-            if i in c or j in c:
-                c.update([i, j])
-                merged = True
+    for i in range(k):
+        for j in range(k - 1, i, -1):
+            if sorted_ranks[j] - sorted_ranks[i] < cd:
+                clique = set(range(i, j + 1))
+                if not any(clique.issubset(c) for c in cliques):
+                    cliques.append(clique)
                 break
-        if not merged:
-            cliques.append({i, j})
 
     bar_y = -0.15
     for clique in cliques:
