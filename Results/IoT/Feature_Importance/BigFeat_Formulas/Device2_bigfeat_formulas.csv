@@ -1,0 +1,4 @@
+device,feature_name,formula,fit_time_s
+Device2,BigFeat_Gen_0,(HH_L5_magnitude - HH_L5_mean),126.64
+Device2,BigFeat_Gen_1,(((HH_L3_magnitude - HH_L1_weight) - (HH_L3_weight - HH_L1_std)) - (abs(HH_L3_mean)^2)),126.64
+Device2,BigFeat_Gen_2,((abs(HH_L3_mean) - (HH_L5_weight - HH_L3_weight)) + ((HH_L3_weight^2) - (HH_L1_weight - HH_L5_mean))),126.64

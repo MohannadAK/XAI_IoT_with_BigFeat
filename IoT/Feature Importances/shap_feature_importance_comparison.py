@@ -262,8 +262,8 @@ def train_tpot_model(X, y, random_state=42):
             n_jobs=1,  # Use single job to avoid issues
             scorers=['f1_weighted'],
             cv=3,                   # 3-fold CV as reported in paper
-            max_time_mins=None,     # No time cap 
-            max_eval_time_mins=None,# No evaluation time cap
+            max_time_mins=None,     # No overall time cap (guarantees completion of generations)
+            max_eval_time_mins=5,   # Modest 5-minute cap per pipeline to catch pathological fits
             early_stop=5            # More patient early stopping
         )
         tpot_classifier.fit(X, y)
@@ -1179,6 +1179,13 @@ def main():
     # Process each device
     for i, csv_file in enumerate(available_files, DEVICE_START_INDEX):
         device_name = f"Device{i}"
+        
+        # Check if device has already been processed successfully
+        expected_output = os.path.join(output_dir, f"{device_name}_performance_comparison.csv")
+        if os.path.exists(expected_output) and os.path.getsize(expected_output) > 0:
+            print(f"\nSkipping {device_name} ({i-DEVICE_START_INDEX+1}/{len(available_files)}) - Already processed successfully")
+            continue
+
         print(f"\nProcessing {device_name} ({i-DEVICE_START_INDEX+1}/{len(available_files)})")
 
         try:

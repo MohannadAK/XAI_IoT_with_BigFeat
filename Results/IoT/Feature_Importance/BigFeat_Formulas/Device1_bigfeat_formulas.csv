@@ -1,0 +1,6 @@
+device,feature_name,formula,fit_time_s
+Device1,BigFeat_Gen_0,((HH_L1_weight * HH_L3_weight) - (HH_L1_weight - HH_L1_mean)),191.8
+Device1,BigFeat_Gen_1,(HH_L1_std + HH_L5_magnitude),191.8
+Device1,BigFeat_Gen_2,(((HH_L1_magnitude * HH_L5_magnitude) * (HH_L3_magnitude * HH_L1_weight)) - ((HH_L5_weight + HH_L1_magnitude) - (HH_L1_weight + HH_L1_weight))),191.8
+Device1,BigFeat_Gen_3,(((HH_L1_magnitude * HH_L3_weight) - (HH_L3_weight - HH_L1_weight)) + ((HH_L1_magnitude + HH_L1_magnitude) + abs(HH_L1_weight))),191.8
+Device1,BigFeat_Gen_4,((HH_L3_mean * HH_L3_mean) - abs(HH_L3_magnitude)),191.8

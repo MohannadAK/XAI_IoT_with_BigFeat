@@ -1,0 +1,78 @@
+BigFeat Generated Feature Formulas — N-BaIoT Dataset
+Generated: 2026-07-29 13:37:37
+Parameters: gen_size=10, iterations=10, estimator='rf', check_corr=True, selection='stability', random_state=42
+======================================================================
+
+============================================================
+Device1  (5 generated features, fit time: 191.8s)
+============================================================
+  BigFeat_Gen_0: ((HH_L1_weight * HH_L3_weight) - (HH_L1_weight - HH_L1_mean))
+  BigFeat_Gen_1: (HH_L1_std + HH_L5_magnitude)
+  BigFeat_Gen_2: (((HH_L1_magnitude * HH_L5_magnitude) * (HH_L3_magnitude * HH_L1_weight)) - ((HH_L5_weight + HH_L1_magnitude) - (HH_L1_weight + HH_L1_weight)))
+  BigFeat_Gen_3: (((HH_L1_magnitude * HH_L3_weight) - (HH_L3_weight - HH_L1_weight)) + ((HH_L1_magnitude + HH_L1_magnitude) + abs(HH_L1_weight)))
+  BigFeat_Gen_4: ((HH_L3_mean * HH_L3_mean) - abs(HH_L3_magnitude))
+
+============================================================
+Device2  (3 generated features, fit time: 126.6s)
+============================================================
+  BigFeat_Gen_0: (HH_L5_magnitude - HH_L5_mean)
+  BigFeat_Gen_1: (((HH_L3_magnitude - HH_L1_weight) - (HH_L3_weight - HH_L1_std)) - (abs(HH_L3_mean)^2))
+  BigFeat_Gen_2: ((abs(HH_L3_mean) - (HH_L5_weight - HH_L3_weight)) + ((HH_L3_weight^2) - (HH_L1_weight - HH_L5_mean)))
+
+============================================================
+Device3  (3 generated features, fit time: 100.4s)
+============================================================
+  BigFeat_Gen_0: ((HH_L3_weight + HH_L3_magnitude) + (HH_L5_weight^2))
+  BigFeat_Gen_1: (HH_L1_std + HH_L1_std)
+  BigFeat_Gen_2: (HH_L1_std + HH_L5_magnitude)
+
+============================================================
+Device4  (3 generated features, fit time: 197.0s)
+============================================================
+  BigFeat_Gen_0: ((HH_L1_weight + HH_L1_weight) - abs(HH_L5_mean))
+  BigFeat_Gen_1: (HH_L5_magnitude - HH_L5_mean)
+  BigFeat_Gen_2: (abs((HH_L5_weight - HH_L1_magnitude)) - ((HH_L3_mean - HH_L1_std) - (HH_L5_mean - HH_L5_weight)))
+
+============================================================
+Device5  (5 generated features, fit time: 213.7s)
+============================================================
+  BigFeat_Gen_0: ((HH_L1_weight - HH_L1_mean) * (HH_L1_std + HH_L3_magnitude))
+  BigFeat_Gen_1: ((HH_L1_weight - HH_L3_weight) - (HH_L1_magnitude - HH_L1_weight))
+  BigFeat_Gen_2: (HH_L1_mean - HH_L1_magnitude)
+  BigFeat_Gen_3: ((HH_L3_magnitude - HH_L5_weight) * (HH_L5_magnitude^2))
+  BigFeat_Gen_4: ((HH_L1_weight * HH_L1_magnitude) + (HH_L3_magnitude - HH_L1_magnitude))
+
+============================================================
+Device6  (4 generated features, fit time: 221.9s)
+============================================================
+  BigFeat_Gen_0: (HH_L1_std + HH_L1_magnitude)
+  BigFeat_Gen_1: (HH_L1_magnitude + HH_L1_weight)
+  BigFeat_Gen_2: ((HH_L1_magnitude * HH_L3_magnitude) - (HH_L1_weight * HH_L3_magnitude))
+  BigFeat_Gen_3: ((abs(HH_L3_mean) - abs(HH_L1_std)) + ((HH_L1_magnitude * HH_L3_magnitude)^2))
+
+============================================================
+Device7  (3 generated features, fit time: 98.5s)
+============================================================
+  BigFeat_Gen_0: (HH_L1_std + HH_L5_magnitude)
+  BigFeat_Gen_1: (HH_L1_weight + HH_L1_magnitude)
+  BigFeat_Gen_2: ((HH_L1_std * HH_L5_weight) + (HH_L3_magnitude^2))
+
+============================================================
+Device8  (6 generated features, fit time: 216.5s)
+============================================================
+  BigFeat_Gen_0: ((HH_L5_weight + HH_L3_mean) * (HH_L1_mean - HH_L1_magnitude))
+  BigFeat_Gen_1: ((HH_L3_magnitude - HH_L3_mean) - (HH_L1_weight - HH_L3_magnitude))
+  BigFeat_Gen_2: (abs(HH_L1_magnitude) * (HH_L1_weight - HH_L1_mean))
+  BigFeat_Gen_3: ((HH_L3_magnitude - HH_L3_mean) + (HH_L1_magnitude * HH_L3_mean))
+  BigFeat_Gen_4: ((HH_L3_magnitude - HH_L1_weight) + abs(HH_L3_mean))
+  BigFeat_Gen_5: (((HH_L1_weight * HH_L1_magnitude) - (HH_L5_mean - HH_L1_weight)) - abs((HH_L1_magnitude - HH_L1_weight)))
+
+============================================================
+Device9  (5 generated features, fit time: 192.3s)
+============================================================
+  BigFeat_Gen_0: (abs((HH_L3_mean - HH_L1_weight)) - abs((HH_L1_magnitude + HH_L1_magnitude)))
+  BigFeat_Gen_1: (HH_L5_mean - HH_L5_magnitude)
+  BigFeat_Gen_2: abs(((HH_L5_mean - HH_L3_magnitude)^2))
+  BigFeat_Gen_3: (abs(abs(HH_L1_mean)) - ((HH_L1_magnitude - HH_L1_weight) + (HH_L3_magnitude - HH_L1_weight)))
+  BigFeat_Gen_4: ((HH_L5_mean^2) - abs(HH_L3_magnitude))
+

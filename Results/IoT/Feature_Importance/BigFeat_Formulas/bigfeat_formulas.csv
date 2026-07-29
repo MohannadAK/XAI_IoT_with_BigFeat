@@ -1,0 +1,38 @@
+device,feature_name,formula,fit_time_s
+Device1,BigFeat_Gen_0,((HH_L1_weight * HH_L3_weight) - (HH_L1_weight - HH_L1_mean)),191.8
+Device1,BigFeat_Gen_1,(HH_L1_std + HH_L5_magnitude),191.8
+Device1,BigFeat_Gen_2,(((HH_L1_magnitude * HH_L5_magnitude) * (HH_L3_magnitude * HH_L1_weight)) - ((HH_L5_weight + HH_L1_magnitude) - (HH_L1_weight + HH_L1_weight))),191.8
+Device1,BigFeat_Gen_3,(((HH_L1_magnitude * HH_L3_weight) - (HH_L3_weight - HH_L1_weight)) + ((HH_L1_magnitude + HH_L1_magnitude) + abs(HH_L1_weight))),191.8
+Device1,BigFeat_Gen_4,((HH_L3_mean * HH_L3_mean) - abs(HH_L3_magnitude)),191.8
+Device2,BigFeat_Gen_0,(HH_L5_magnitude - HH_L5_mean),126.64
+Device2,BigFeat_Gen_1,(((HH_L3_magnitude - HH_L1_weight) - (HH_L3_weight - HH_L1_std)) - (abs(HH_L3_mean)^2)),126.64
+Device2,BigFeat_Gen_2,((abs(HH_L3_mean) - (HH_L5_weight - HH_L3_weight)) + ((HH_L3_weight^2) - (HH_L1_weight - HH_L5_mean))),126.64
+Device3,BigFeat_Gen_0,((HH_L3_weight + HH_L3_magnitude) + (HH_L5_weight^2)),100.45
+Device3,BigFeat_Gen_1,(HH_L1_std + HH_L1_std),100.45
+Device3,BigFeat_Gen_2,(HH_L1_std + HH_L5_magnitude),100.45
+Device4,BigFeat_Gen_0,((HH_L1_weight + HH_L1_weight) - abs(HH_L5_mean)),196.99
+Device4,BigFeat_Gen_1,(HH_L5_magnitude - HH_L5_mean),196.99
+Device4,BigFeat_Gen_2,(abs((HH_L5_weight - HH_L1_magnitude)) - ((HH_L3_mean - HH_L1_std) - (HH_L5_mean - HH_L5_weight))),196.99
+Device5,BigFeat_Gen_0,((HH_L1_weight - HH_L1_mean) * (HH_L1_std + HH_L3_magnitude)),213.66
+Device5,BigFeat_Gen_1,((HH_L1_weight - HH_L3_weight) - (HH_L1_magnitude - HH_L1_weight)),213.66
+Device5,BigFeat_Gen_2,(HH_L1_mean - HH_L1_magnitude),213.66
+Device5,BigFeat_Gen_3,((HH_L3_magnitude - HH_L5_weight) * (HH_L5_magnitude^2)),213.66
+Device5,BigFeat_Gen_4,((HH_L1_weight * HH_L1_magnitude) + (HH_L3_magnitude - HH_L1_magnitude)),213.66
+Device6,BigFeat_Gen_0,(HH_L1_std + HH_L1_magnitude),221.88
+Device6,BigFeat_Gen_1,(HH_L1_magnitude + HH_L1_weight),221.88
+Device6,BigFeat_Gen_2,((HH_L1_magnitude * HH_L3_magnitude) - (HH_L1_weight * HH_L3_magnitude)),221.88
+Device6,BigFeat_Gen_3,((abs(HH_L3_mean) - abs(HH_L1_std)) + ((HH_L1_magnitude * HH_L3_magnitude)^2)),221.88
+Device7,BigFeat_Gen_0,(HH_L1_std + HH_L5_magnitude),98.47
+Device7,BigFeat_Gen_1,(HH_L1_weight + HH_L1_magnitude),98.47
+Device7,BigFeat_Gen_2,((HH_L1_std * HH_L5_weight) + (HH_L3_magnitude^2)),98.47
+Device8,BigFeat_Gen_0,((HH_L5_weight + HH_L3_mean) * (HH_L1_mean - HH_L1_magnitude)),216.48
+Device8,BigFeat_Gen_1,((HH_L3_magnitude - HH_L3_mean) - (HH_L1_weight - HH_L3_magnitude)),216.48
+Device8,BigFeat_Gen_2,(abs(HH_L1_magnitude) * (HH_L1_weight - HH_L1_mean)),216.48
+Device8,BigFeat_Gen_3,((HH_L3_magnitude - HH_L3_mean) + (HH_L1_magnitude * HH_L3_mean)),216.48
+Device8,BigFeat_Gen_4,((HH_L3_magnitude - HH_L1_weight) + abs(HH_L3_mean)),216.48
+Device8,BigFeat_Gen_5,(((HH_L1_weight * HH_L1_magnitude) - (HH_L5_mean - HH_L1_weight)) - abs((HH_L1_magnitude - HH_L1_weight))),216.48
+Device9,BigFeat_Gen_0,(abs((HH_L3_mean - HH_L1_weight)) - abs((HH_L1_magnitude + HH_L1_magnitude))),192.32
+Device9,BigFeat_Gen_1,(HH_L5_mean - HH_L5_magnitude),192.32
+Device9,BigFeat_Gen_2,abs(((HH_L5_mean - HH_L3_magnitude)^2)),192.32
+Device9,BigFeat_Gen_3,(abs(abs(HH_L1_mean)) - ((HH_L1_magnitude - HH_L1_weight) + (HH_L3_magnitude - HH_L1_weight))),192.32
+Device9,BigFeat_Gen_4,((HH_L5_mean^2) - abs(HH_L3_magnitude)),192.32
