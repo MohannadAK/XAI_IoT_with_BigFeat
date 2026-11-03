@@ -1,0 +1,354 @@
+[
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "all",
+  "metric": "f1_macro",
+  "n_units": 9
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "all",
+  "metric": "agree_shap_pfi_tau",
+  "n_units": 9
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "all",
+  "metric": "faithfulness_corr",
+  "n_units": 9
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "all",
+  "metric": "train_time_s",
+  "n_units": 9
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "prebuilt20",
+  "metric": "f1_macro",
+  "n_units": 9,
+  "friedman_chi2": 1.6666666666666572,
+  "friedman_p": 0.6443698056370273,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.577,
+    "tpot": 0.9472,
+    "both": 0.885
+   },
+   "bigfeat": {
+    "original": 0.577,
+    "bigfeat": 1.0,
+    "tpot": 0.885,
+    "both": 0.9472
+   },
+   "tpot": {
+    "original": 0.9472,
+    "bigfeat": 0.885,
+    "tpot": 1.0,
+    "both": 0.9978
+   },
+   "both": {
+    "original": 0.885,
+    "bigfeat": 0.9472,
+    "tpot": 0.9978,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 2.888888888888889,
+   "bigfeat": 2.111111111111111,
+   "tpot": 2.5555555555555554,
+   "both": 2.4444444444444446
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "prebuilt20",
+  "metric": "agree_shap_pfi_tau",
+  "n_units": 9,
+  "friedman_chi2": 19.933333333333337,
+  "friedman_p": 0.00017522877980182124,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.0517,
+    "tpot": 0.9834,
+    "both": 0.0056
+   },
+   "bigfeat": {
+    "original": 0.0517,
+    "bigfeat": 1.0,
+    "tpot": 0.0183,
+    "both": 0.885
+   },
+   "tpot": {
+    "original": 0.9834,
+    "bigfeat": 0.0183,
+    "tpot": 1.0,
+    "both": 0.0015
+   },
+   "both": {
+    "original": 0.0056,
+    "bigfeat": 0.885,
+    "tpot": 0.0015,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 1.6666666666666667,
+   "bigfeat": 3.2222222222222223,
+   "tpot": 1.4444444444444444,
+   "both": 3.6666666666666665
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "prebuilt20",
+  "metric": "faithfulness_corr",
+  "n_units": 9,
+  "friedman_chi2": 21.53333333333333,
+  "friedman_p": 8.156665923509251e-05,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.1257,
+    "tpot": 0.9834,
+    "both": 0.0015
+   },
+   "bigfeat": {
+    "original": 0.1257,
+    "bigfeat": 1.0,
+    "tpot": 0.0517,
+    "both": 0.4615
+   },
+   "tpot": {
+    "original": 0.9834,
+    "bigfeat": 0.0517,
+    "tpot": 1.0,
+    "both": 0.0003
+   },
+   "both": {
+    "original": 0.0015,
+    "bigfeat": 0.4615,
+    "tpot": 0.0003,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 3.3333333333333335,
+   "bigfeat": 2.0,
+   "tpot": 3.5555555555555554,
+   "both": 1.1111111111111112
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "prebuilt20",
+  "metric": "train_time_s",
+  "n_units": 9,
+  "friedman_chi2": 25.133333333333326,
+  "friedman_p": 1.4480404930720843e-05,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.3543,
+    "tpot": 0.0015,
+    "both": 0.0
+   },
+   "bigfeat": {
+    "original": 0.3543,
+    "bigfeat": 1.0,
+    "tpot": 0.1848,
+    "both": 0.0183
+   },
+   "tpot": {
+    "original": 0.0015,
+    "bigfeat": 0.1848,
+    "tpot": 1.0,
+    "both": 0.798
+   },
+   "both": {
+    "original": 0.0,
+    "bigfeat": 0.0183,
+    "tpot": 0.798,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 4.0,
+   "bigfeat": 3.0,
+   "tpot": 1.7777777777777777,
+   "both": 1.2222222222222223
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "infold20",
+  "metric": "f1_macro",
+  "n_units": 9,
+  "friedman_chi2": 4.866666666666674,
+  "friedman_p": 0.1818249018059912,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.577,
+    "tpot": 0.798,
+    "both": 1.0
+   },
+   "bigfeat": {
+    "original": 0.577,
+    "bigfeat": 1.0,
+    "tpot": 0.1257,
+    "both": 0.577
+   },
+   "tpot": {
+    "original": 0.798,
+    "bigfeat": 0.1257,
+    "tpot": 1.0,
+    "both": 0.798
+   },
+   "both": {
+    "original": 1.0,
+    "bigfeat": 0.577,
+    "tpot": 0.798,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 2.5555555555555554,
+   "bigfeat": 1.7777777777777777,
+   "tpot": 3.111111111111111,
+   "both": 2.5555555555555554
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "infold20",
+  "metric": "agree_shap_pfi_tau",
+  "n_units": 9,
+  "friedman_chi2": 13.133333333333326,
+  "friedman_p": 0.004356959680533872,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.0822,
+    "tpot": 0.9978,
+    "both": 0.0517
+   },
+   "bigfeat": {
+    "original": 0.0822,
+    "bigfeat": 1.0,
+    "tpot": 0.0517,
+    "both": 0.9978
+   },
+   "tpot": {
+    "original": 0.9978,
+    "bigfeat": 0.0517,
+    "tpot": 1.0,
+    "both": 0.0314
+   },
+   "both": {
+    "original": 0.0517,
+    "bigfeat": 0.9978,
+    "tpot": 0.0314,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 3.2222222222222223,
+   "bigfeat": 1.7777777777777777,
+   "tpot": 3.3333333333333335,
+   "both": 1.6666666666666667
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "infold20",
+  "metric": "faithfulness_corr",
+  "n_units": 9,
+  "friedman_chi2": 8.599999999999994,
+  "friedman_p": 0.03511011567598109,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.1848,
+    "tpot": 0.1257,
+    "both": 0.0314
+   },
+   "bigfeat": {
+    "original": 0.1848,
+    "bigfeat": 1.0,
+    "tpot": 0.9978,
+    "both": 0.885
+   },
+   "tpot": {
+    "original": 0.1257,
+    "bigfeat": 0.9978,
+    "tpot": 1.0,
+    "both": 0.9472
+   },
+   "both": {
+    "original": 0.0314,
+    "bigfeat": 0.885,
+    "tpot": 0.9472,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 1.4444444444444444,
+   "bigfeat": 2.6666666666666665,
+   "tpot": 2.7777777777777777,
+   "both": 3.111111111111111
+  }
+ },
+ {
+  "dataset": "nbaiot",
+  "feature_mode": "infold20",
+  "metric": "train_time_s",
+  "n_units": 9,
+  "friedman_chi2": 27.0,
+  "friedman_p": 5.887355583577668e-06,
+  "friedman_k": 4,
+  "nemenyi": {
+   "original": {
+    "original": 1.0,
+    "bigfeat": 0.3543,
+    "tpot": 0.0056,
+    "both": 0.0
+   },
+   "bigfeat": {
+    "original": 0.3543,
+    "bigfeat": 1.0,
+    "tpot": 0.3543,
+    "both": 0.0056
+   },
+   "tpot": {
+    "original": 0.0056,
+    "bigfeat": 0.3543,
+    "tpot": 1.0,
+    "both": 0.3543
+   },
+   "both": {
+    "original": 0.0,
+    "bigfeat": 0.0056,
+    "tpot": 0.3543,
+    "both": 1.0
+   }
+  },
+  "mean_ranks": {
+   "original": 4.0,
+   "bigfeat": 3.0,
+   "tpot": 2.0,
+   "both": 1.0
+  }
+ }
+]

@@ -1,0 +1,477 @@
+{
+ "dataset": "ciciot2023",
+ "unit": "all",
+ "feature_mode": "all",
+ "seed": 1,
+ "config": "both",
+ "tpot_params": {
+  "bootstrap": "False",
+  "ccp_alpha": 0.0,
+  "class_weight": null,
+  "criterion": "entropy",
+  "max_depth": null,
+  "max_features": "sqrt",
+  "max_leaf_nodes": null,
+  "max_samples": null,
+  "min_impurity_decrease": 0.0,
+  "min_samples_leaf": "1",
+  "min_samples_split": "10",
+  "min_weight_fraction_leaf": 0.0,
+  "monotonic_cst": null,
+  "n_estimators": "300",
+  "n_jobs": null,
+  "oob_score": false,
+  "random_state": null,
+  "verbose": 0,
+  "warm_start": false
+ },
+ "accuracy": 0.778875,
+ "f1_macro": 0.7790136175371092,
+ "precision_macro": 0.7827394485209989,
+ "recall_macro": 0.778875,
+ "roc_auc_macro": 0.9625491438492064,
+ "pr_auc_macro": 0.8415138363413619,
+ "fpr_macro": 0.031589285714285716,
+ "fnr_macro": 0.22112500000000002,
+ "per_class_f1": {
+  "Benign": 0.7157862688384838,
+  "BruteForce": 0.6377532883043014,
+  "DDoS": 0.9169457468184863,
+  "DoS": 0.9200663349917081,
+  "Mirai": 0.9971624102820899,
+  "Recon": 0.6285510094693586,
+  "Spoofing": 0.8304474541402366,
+  "Web": 0.5853964274522093
+ },
+ "confusion_matrix": [
+  [
+   2351,
+   206,
+   0,
+   0,
+   0,
+   115,
+   62,
+   266
+  ],
+  [
+   391,
+   1794,
+   0,
+   0,
+   0,
+   199,
+   96,
+   520
+  ],
+  [
+   1,
+   0,
+   2738,
+   256,
+   4,
+   0,
+   1,
+   0
+  ],
+  [
+   0,
+   0,
+   222,
+   2774,
+   0,
+   2,
+   2,
+   0
+  ],
+  [
+   1,
+   0,
+   12,
+   0,
+   2987,
+   0,
+   0,
+   0
+  ],
+  [
+   363,
+   287,
+   0,
+   0,
+   0,
+   1759,
+   82,
+   509
+  ],
+  [
+   196,
+   78,
+   0,
+   0,
+   0,
+   85,
+   2422,
+   219
+  ],
+  [
+   266,
+   261,
+   0,
+   0,
+   0,
+   437,
+   168,
+   1868
+  ]
+ ],
+ "classes": [
+  "Benign",
+  "BruteForce",
+  "DDoS",
+  "DoS",
+  "Mirai",
+  "Recon",
+  "Spoofing",
+  "Web"
+ ],
+ "n_train": 56000,
+ "n_test": 24000,
+ "n_features_original": 39,
+ "n_features_generated": 18,
+ "n_features_model": 57,
+ "time_prep_s": 0.021278696003719233,
+ "time_featgen_s": 186.16621900099562,
+ "time_fit_s": 1437.8525144409941,
+ "train_time_s": 1624.0400121379935,
+ "train_cpu_s": 233.17525216700005,
+ "infer_ms_per_1k": 37.274889500016194,
+ "model_size_mb": 552.015335,
+ "n_tree_nodes": 4311794,
+ "formulas": [
+  {
+   "name": "BF_0",
+   "formula": "(HTTP - Max)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    15,
+    32
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_1",
+   "formula": "((Header_Length - HTTPS) + (Number - Rate))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    0,
+    16,
+    37,
+    3
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_2",
+   "formula": "(AVG + HTTPS)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    33,
+    16
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_3",
+   "formula": "((Time_To_Live)^2 - (Std - AVG))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    2,
+    34,
+    33
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_4",
+   "formula": "(((Protocol_Type + Header_Length) - (TCP - Rate)) * (|HTTPS| + (AVG - Tot_sum)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    1,
+    0,
+    22,
+    3,
+    16,
+    33,
+    30
+   ],
+   "n_unique_leaves": 7
+  },
+  {
+   "name": "BF_5",
+   "formula": "(((IAT + Variance) - (Variance + syn_count)) - (|SSH| - (HTTP)^2))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    36,
+    38,
+    38,
+    12,
+    20,
+    15
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_6",
+   "formula": "(Std - AVG)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    34,
+    33
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_7",
+   "formula": "(((Tot_sum)^2 + (Time_To_Live * Header_Length)) - ((Tot_sum * Time_To_Live) + (psh_flag_number - Tot_sum)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    30,
+    2,
+    0,
+    30,
+    2,
+    7,
+    30
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_8",
+   "formula": "((UDP + Header_Length) - (SSH + Rate))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    23,
+    0,
+    20,
+    3
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_9",
+   "formula": "|((Tot_sum + Rate) + (psh_flag_number - Time_To_Live))|",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    30,
+    3,
+    7,
+    2
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_10",
+   "formula": "(((Protocol_Type + Tot_sum) - (syn_count - Rate)) - |(ack_flag_number)^2|)",
+   "depth": 3,
+   "n_ops": 6,
+   "leaves": [
+    1,
+    30,
+    12,
+    3,
+    8
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_11",
+   "formula": "((Tot_size + Protocol_Type) - (rst_count * Number))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    35,
+    1,
+    14,
+    37
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_12",
+   "formula": "((Tot_size + HTTPS) - (TCP - Header_Length))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    35,
+    16,
+    22,
+    0
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_13",
+   "formula": "(((Protocol_Type - Header_Length) + |Tot_size|) + ((HTTPS + Max))^2)",
+   "depth": 3,
+   "n_ops": 6,
+   "leaves": [
+    1,
+    0,
+    35,
+    16,
+    32
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_14",
+   "formula": "((rst_flag_number - Tot_size) + (rst_flag_number + Std))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    6,
+    35,
+    6,
+    34
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_15",
+   "formula": "((|IAT| - (Std - AVG)))^2",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    36,
+    34,
+    33
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_16",
+   "formula": "|((Time_To_Live)^2 - (Tot_size + HTTP))|",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    2,
+    35,
+    15
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_17",
+   "formula": "|((Tot_sum + HTTPS) + (Std - Time_To_Live))|",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    30,
+    16,
+    34,
+    2
+   ],
+   "n_unique_leaves": 4
+  }
+ ],
+ "formula_mean_depth": 2.3333333333333335,
+ "formula_max_depth": 3,
+ "formula_mean_ops": 3.888888888888889,
+ "formula_total_ops": 70,
+ "xai_shap_vs_pfi": {
+  "kendall_tau": 0.357837665961891,
+  "spearman": 0.47719800385453776,
+  "top5_jaccard": 0.25,
+  "top10_jaccard": 0.25
+ },
+ "xai_shap_vs_lime": {
+  "kendall_tau": 0.7218045112781956,
+  "spearman": 0.8999870365569096,
+  "top5_jaccard": 0.25,
+  "top10_jaccard": 0.42857142857142855
+ },
+ "xai_pfi_vs_lime": {
+  "kendall_tau": 0.357837665961891,
+  "spearman": 0.4856143663331435,
+  "top5_jaccard": 0.1111111111111111,
+  "top10_jaccard": 0.25
+ },
+ "xai_local_shap_lime_spearman": 0.5686427678235499,
+ "xai_complexity_shap": {
+  "effective_n_features": 32.819306376148454,
+  "normalized_entropy": 0.8634609654916515,
+  "n_features_80pct": 27,
+  "n_features_total": 57
+ },
+ "xai_local_normalized_entropy": 0.8068303752741675,
+ "xai_deletion_insertion_shap": {
+  "deletion_auc": 0.2509366486723276,
+  "insertion_auc": 0.5698353604185517,
+  "deletion_auc_random": 0.4707779727577391,
+  "insertion_auc_random": 0.4352635648699978,
+  "deletion_gain": 0.21984132408541146,
+  "insertion_gain": 0.13457179554855386,
+  "deletion_curve": [
+   0.7805598640280562,
+   0.7552449538365608,
+   0.6958303987388644,
+   0.633358198485218,
+   0.5540951229280765,
+   0.4754280744495694,
+   0.3623702629139338,
+   0.24729414579392137,
+   0.18852191830489437,
+   0.12068170415921031,
+   0.08782017246122643,
+   0.09616983572996578,
+   0.06413554995880535,
+   0.07515141127214972,
+   0.07309274698313357,
+   0.06604366712391405,
+   0.027604630454140695,
+   0.027580071174377226,
+   0.027580071174377226,
+   0.027580071174377226,
+   0.027580071174377226
+  ],
+  "insertion_curve": [
+   0.027580071174377226,
+   0.10734391209604688,
+   0.18119120636733083,
+   0.32913810693409207,
+   0.36127260985734455,
+   0.43405170800592463,
+   0.4627008097907772,
+   0.5415270365706678,
+   0.5865627549497254,
+   0.6401655170581477,
+   0.6254321294408083,
+   0.6683631856960947,
+   0.6924894828693893,
+   0.7427557373883009,
+   0.7569692654275169,
+   0.7668971880848156,
+   0.7696316389581628,
+   0.7793556013130694,
+   0.7805600594419315,
+   0.7805598640280562,
+   0.7805598640280562
+  ]
+ },
+ "xai_faithfulness_corr": 0.7862625068729678,
+ "xai_faithfulness_n": 100,
+ "xai_bootstrap_tau_mean": 0.9659398496240602,
+ "xai_generated_share": 0.32238048812590214,
+ "time_xai_s": 869.7111082240008
+}

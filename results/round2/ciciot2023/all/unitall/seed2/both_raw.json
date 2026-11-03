@@ -1,0 +1,433 @@
+{
+ "dataset": "ciciot2023",
+ "unit": "all",
+ "feature_mode": "all",
+ "seed": 2,
+ "config": "both_raw",
+ "scaled": false,
+ "tpot_params": {
+  "bootstrap": "False",
+  "ccp_alpha": 0.0,
+  "class_weight": null,
+  "criterion": "gini",
+  "max_depth": null,
+  "max_features": "sqrt",
+  "max_leaf_nodes": null,
+  "max_samples": null,
+  "min_impurity_decrease": 0.0,
+  "min_samples_leaf": "2",
+  "min_samples_split": "5",
+  "min_weight_fraction_leaf": 0.0,
+  "monotonic_cst": null,
+  "n_estimators": "300",
+  "n_jobs": null,
+  "oob_score": false,
+  "random_state": null,
+  "verbose": 0,
+  "warm_start": false
+ },
+ "accuracy": 0.78225,
+ "f1_macro": 0.7821755058068642,
+ "precision_macro": 0.7859616812381597,
+ "recall_macro": 0.7822500000000001,
+ "roc_auc_macro": 0.9637821210317461,
+ "pr_auc_macro": 0.8452687465084125,
+ "fpr_macro": 0.031107142857142854,
+ "fnr_macro": 0.21775,
+ "per_class_f1": {
+  "Benign": 0.7081781617756592,
+  "BruteForce": 0.6451036454610436,
+  "DDoS": 0.9259566009607421,
+  "DoS": 0.9291206954195921,
+  "Mirai": 0.9956492637215528,
+  "Recon": 0.6382827745254568,
+  "Spoofing": 0.8286007526513856,
+  "Web": 0.5865121519394817
+ },
+ "confusion_matrix": [
+  [
+   2377,
+   187,
+   0,
+   0,
+   0,
+   138,
+   73,
+   225
+  ],
+  [
+   435,
+   1805,
+   0,
+   0,
+   0,
+   204,
+   86,
+   470
+  ],
+  [
+   0,
+   0,
+   2795,
+   202,
+   1,
+   1,
+   1,
+   0
+  ],
+  [
+   0,
+   0,
+   219,
+   2779,
+   0,
+   0,
+   1,
+   1
+  ],
+  [
+   0,
+   0,
+   23,
+   1,
+   2975,
+   0,
+   1,
+   0
+  ],
+  [
+   351,
+   275,
+   0,
+   0,
+   0,
+   1799,
+   90,
+   485
+  ],
+  [
+   242,
+   66,
+   0,
+   0,
+   0,
+   60,
+   2422,
+   210
+  ],
+  [
+   308,
+   263,
+   0,
+   0,
+   0,
+   435,
+   172,
+   1822
+  ]
+ ],
+ "classes": [
+  "Benign",
+  "BruteForce",
+  "DDoS",
+  "DoS",
+  "Mirai",
+  "Recon",
+  "Spoofing",
+  "Web"
+ ],
+ "n_train": 56000,
+ "n_test": 24000,
+ "n_features_original": 39,
+ "n_features_generated": 14,
+ "n_features_model": 53,
+ "time_prep_s": 7.723996532149613e-06,
+ "time_featgen_s": 174.2040087219939,
+ "time_fit_s": 1178.676093572998,
+ "train_time_s": 1352.8801100189885,
+ "train_cpu_s": 221.9732504240019,
+ "infer_ms_per_1k": 38.65660599997985,
+ "model_size_mb": 710.801885,
+ "n_tree_nodes": 5552314,
+ "formulas": [
+  {
+   "name": "BF_0",
+   "formula": "((Std - SSH) - (Tot_size - IAT))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    34,
+    20,
+    35,
+    36
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_1",
+   "formula": "(((AVG - Std) - (HTTPS)^2) - ((HTTPS)^2 - (fin_flag_number - IAT)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    33,
+    34,
+    16,
+    16,
+    4,
+    36
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_2",
+   "formula": "(Number - Rate)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    37,
+    3
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_3",
+   "formula": "(((UDP - Max) - (HTTP - HTTPS)) - ((LLC - AVG) - (Tot_sum + Rate)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    23,
+    32,
+    15,
+    16,
+    29,
+    33,
+    30,
+    3
+   ],
+   "n_unique_leaves": 8
+  },
+  {
+   "name": "BF_4",
+   "formula": "((Tot_sum - Variance) - (TCP - Protocol_Type))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    30,
+    38,
+    22,
+    1
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_5",
+   "formula": "(Std - AVG)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    34,
+    33
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_6",
+   "formula": "|(Tot_size - Std)|",
+   "depth": 2,
+   "n_ops": 2,
+   "leaves": [
+    35,
+    34
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_7",
+   "formula": "(((SSH * SSH) - (Min + AVG)) - ((fin_flag_number - Header_Length) - (Protocol_Type - Rate)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    20,
+    20,
+    31,
+    33,
+    4,
+    0,
+    1,
+    3
+   ],
+   "n_unique_leaves": 7
+  },
+  {
+   "name": "BF_8",
+   "formula": "(|AVG| - (Max + Std))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    33,
+    32,
+    34
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_9",
+   "formula": "((AVG - rst_count) - (Std - Rate))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    33,
+    14,
+    34,
+    3
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_10",
+   "formula": "(|(Tot_size + Number)| * |(AVG - Std)|)",
+   "depth": 3,
+   "n_ops": 5,
+   "leaves": [
+    35,
+    37,
+    33,
+    34
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_11",
+   "formula": "(((Tot_size - Rate) - (Std)^2) - ((HTTP + Tot_sum))^2)",
+   "depth": 3,
+   "n_ops": 6,
+   "leaves": [
+    35,
+    3,
+    34,
+    15,
+    30
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_12",
+   "formula": "(((HTTPS + Tot_sum) - (fin_flag_number + syn_flag_number)) - ((Protocol_Type - UDP) + (IAT + Max)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    16,
+    30,
+    4,
+    5,
+    1,
+    23,
+    36,
+    32
+   ],
+   "n_unique_leaves": 8
+  },
+  {
+   "name": "BF_13",
+   "formula": "((Tot_size * Max) * (Tot_sum - Protocol_Type))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    35,
+    32,
+    30,
+    1
+   ],
+   "n_unique_leaves": 4
+  }
+ ],
+ "formula_mean_depth": 2.2857142857142856,
+ "formula_max_depth": 3,
+ "formula_mean_ops": 4.142857142857143,
+ "formula_total_ops": 58,
+ "xai_shap_vs_pfi": {
+  "kendall_tau": 0.4312038683669562,
+  "spearman": 0.5881363682458369,
+  "top5_jaccard": 0.25,
+  "top10_jaccard": 0.17647058823529413
+ },
+ "xai_shap_vs_lime": {
+  "kendall_tau": 0.8243831640058056,
+  "spearman": 0.9516207063376875,
+  "top5_jaccard": 0.6666666666666666,
+  "top10_jaccard": 0.6666666666666666
+ },
+ "xai_pfi_vs_lime": {
+  "kendall_tau": 0.3911952620236303,
+  "spearman": 0.5478014634208798,
+  "top5_jaccard": 0.25,
+  "top10_jaccard": 0.25
+ },
+ "xai_local_shap_lime_spearman": 0.6307712465731333,
+ "xai_complexity_shap": {
+  "effective_n_features": 30.064484490656497,
+  "normalized_entropy": 0.8572026017113675,
+  "n_features_80pct": 24,
+  "n_features_total": 53
+ },
+ "xai_local_normalized_entropy": 0.797968414617384,
+ "xai_deletion_insertion_shap": {
+  "deletion_auc": 0.2584988317573332,
+  "insertion_auc": 0.612535320515678,
+  "deletion_auc_random": 0.45619166543130824,
+  "insertion_auc_random": 0.4460546980832274,
+  "deletion_gain": 0.19769283367397505,
+  "insertion_gain": 0.16648062243245065,
+  "deletion_curve": [
+   0.7941793564415094,
+   0.7534860386982383,
+   0.7494585169506697,
+   0.6579826935997404,
+   0.5160832187727598,
+   0.41520379812799435,
+   0.3036609490468789,
+   0.2532869932369212,
+   0.2551422650346759,
+   0.18928587363008442,
+   0.15817580169764056,
+   0.11934266992247532,
+   0.07762119809757731,
+   0.061047829786539866,
+   0.046791519536979256,
+   0.06107065803667745,
+   0.056420381420381416,
+   0.027382012466607302,
+   0.027382012466607302,
+   0.027382012466607302,
+   0.027382012466607302
+  ],
+  "insertion_curve": [
+   0.027382012466607302,
+   0.16014762287039513,
+   0.2397829014986052,
+   0.34290009970710367,
+   0.41113353147240883,
+   0.5079502941345502,
+   0.5515818287995176,
+   0.6095099007255607,
+   0.6520942639480279,
+   0.6864226420376016,
+   0.6952862548916144,
+   0.7190626027968163,
+   0.7518700082055305,
+   0.7744730606007453,
+   0.7900263793133142,
+   0.7917233032643278,
+   0.7886205984440654,
+   0.7930508978462762,
+   0.793672064896928,
+   0.7941793564415094,
+   0.7941793564415094
+  ]
+ },
+ "xai_faithfulness_corr": 0.7645681444662138,
+ "xai_faithfulness_n": 100,
+ "xai_bootstrap_tau_mean": 0.9667053701015965,
+ "xai_generated_share": 0.3280453308745988,
+ "time_xai_s": 1082.7315600470029
+}

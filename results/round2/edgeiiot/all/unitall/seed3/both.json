@@ -1,0 +1,770 @@
+{
+ "dataset": "edgeiiot",
+ "unit": "all",
+ "feature_mode": "all",
+ "seed": 3,
+ "config": "both",
+ "scaled": false,
+ "tpot_params": {
+  "bootstrap": "False",
+  "ccp_alpha": 0.0,
+  "class_weight": null,
+  "criterion": "entropy",
+  "max_depth": 20,
+  "max_features": "sqrt",
+  "max_leaf_nodes": null,
+  "max_samples": null,
+  "min_impurity_decrease": 0.0,
+  "min_samples_leaf": "1",
+  "min_samples_split": "10",
+  "min_weight_fraction_leaf": 0.0,
+  "monotonic_cst": null,
+  "n_estimators": "100",
+  "n_jobs": null,
+  "oob_score": false,
+  "random_state": null,
+  "verbose": 0,
+  "warm_start": false
+ },
+ "accuracy": 0.9329480663553572,
+ "f1_macro": 0.9284828297461878,
+ "precision_macro": 0.9427292721643875,
+ "recall_macro": 0.9205914727682611,
+ "roc_auc_macro": 0.9970262052590296,
+ "pr_auc_macro": 0.9604870449788608,
+ "fpr_macro": 0.00483816695683383,
+ "fnr_macro": 0.07940852723173894,
+ "per_class_f1": {
+  "Backdoor": 0.9597490852064819,
+  "DDoS_HTTP": 0.899835255354201,
+  "DDoS_ICMP": 0.9998333611064822,
+  "DDoS_TCP": 1.0,
+  "DDoS_UDP": 0.9998333055509252,
+  "Fingerprinting": 0.7858823529411765,
+  "MITM": 1.0,
+  "Normal": 1.0,
+  "Password": 0.8150125628140703,
+  "Port_Scanning": 0.9655172413793104,
+  "Ransomware": 0.9486005089058525,
+  "SQL_injection": 0.8405533309064434,
+  "Uploading": 0.8438418817379941,
+  "Vulnerability_scanner": 0.969068660774983,
+  "XSS": 0.8995148995148995
+ },
+ "confusion_matrix": [
+  [
+   2754,
+   0,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0,
+   56,
+   149,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   2731,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   19,
+   250
+  ],
+  [
+   0,
+   0,
+   3000,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   3000,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   1,
+   0,
+   2999,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   2,
+   0,
+   0,
+   0,
+   0,
+   167,
+   0,
+   0,
+   0,
+   45,
+   42,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   107,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   3000,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   2595,
+   0,
+   0,
+   97,
+   300,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0,
+   2674,
+   1,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   23,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   88,
+   2796,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   452,
+   0,
+   0,
+   2309,
+   239,
+   0,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   329,
+   0,
+   0,
+   88,
+   2583,
+   0,
+   0
+  ],
+  [
+   0,
+   86,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   2851,
+   63
+  ],
+  [
+   0,
+   253,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   14,
+   2596
+  ]
+ ],
+ "classes": [
+  "Backdoor",
+  "DDoS_HTTP",
+  "DDoS_ICMP",
+  "DDoS_TCP",
+  "DDoS_UDP",
+  "Fingerprinting",
+  "MITM",
+  "Normal",
+  "Password",
+  "Port_Scanning",
+  "Ransomware",
+  "SQL_injection",
+  "Uploading",
+  "Vulnerability_scanner",
+  "XSS"
+ ],
+ "n_train": 90440,
+ "n_test": 38761,
+ "n_features_original": 66,
+ "n_features_generated": 26,
+ "n_features_model": 92,
+ "time_prep_s": 9.126990335062146e-06,
+ "time_featgen_s": 218.07743282199954,
+ "time_fit_s": 1573.266531027999,
+ "train_time_s": 1791.3439729769889,
+ "train_cpu_s": 286.8197058750011,
+ "infer_ms_per_1k": 7.573728799083846,
+ "model_size_mb": 79.987488,
+ "n_tree_nodes": 434486,
+ "formulas": [
+  {
+   "name": "BF_0",
+   "formula": "((tcp_checksum - tcp_connection_rst) * (tcp_flags_ack + http_referer_0))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    8,
+    10,
+    14,
+    38
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_1",
+   "formula": "((icmp_checksum + tcp_checksum) - (tcp_connection_rst + tcp_connection_syn))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    2,
+    8,
+    10,
+    11
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_2",
+   "formula": "(tcp_seq + tcp_seq)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    16,
+    16
+   ],
+   "n_unique_leaves": 1
+  },
+  {
+   "name": "BF_3",
+   "formula": "((tcp_ack - http_content_length) + (http_referer_0_0 + http_referer_0_0))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    6,
+    4,
+    39,
+    39
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_4",
+   "formula": "((tcp_flags + tcp_len) - (http_referer_0 + http_request_method_0_0))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    13,
+    15,
+    38,
+    32
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_5",
+   "formula": "((tcp_ack + tcp_len) + (http_request_method_0_0 - tcp_seq))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    6,
+    15,
+    32,
+    16
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_6",
+   "formula": "(((tcp_flags + tcp_connection_rst) - (udp_stream + tcp_len)))^2",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    13,
+    10,
+    17,
+    15
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_7",
+   "formula": "|((tcp_seq + mqtt_conack_flags_0_0) + (mqtt_protoname_0_0 + mqtt_protoname_0_0))|",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    16,
+    58,
+    61,
+    61
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_8",
+   "formula": "(tcp_seq + tcp_ack)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    16,
+    6
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_9",
+   "formula": "((mqtt_conack_flags_0_0 - tcp_len) + |http_request_version_0|)",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    58,
+    15,
+    43
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_10",
+   "formula": "(|tcp_len| - (tcp_flags - tcp_connection_rst))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    15,
+    13,
+    10
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_11",
+   "formula": "((tcp_len + http_request_method_0_0) + (tcp_seq - http_referer_0_0))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    15,
+    32,
+    16,
+    39
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_12",
+   "formula": "(((tcp_ack + mqtt_protoname_0_0) + (dns_qry_name_len_0 + mqtt_topic_0)) + ((http_request_version_0 + udp_stream) - (mqtt_conack_flags_0 - http_request_method_0_0)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    6,
+    61,
+    49,
+    63,
+    43,
+    17,
+    57,
+    32
+   ],
+   "n_unique_leaves": 8
+  },
+  {
+   "name": "BF_13",
+   "formula": "(((mqtt_conack_flags_0_0 + tcp_len) - |udp_stream|))^2",
+   "depth": 3,
+   "n_ops": 4,
+   "leaves": [
+    58,
+    15,
+    17
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_14",
+   "formula": "(((http_request_method_0_0 - http_request_method_0_0) + (tcp_len + mqtt_topic_0_0)) - |(tcp_flags)^2|)",
+   "depth": 3,
+   "n_ops": 6,
+   "leaves": [
+    32,
+    32,
+    15,
+    64,
+    13
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_15",
+   "formula": "(((http_request_version_0_0 - http_referer_0_0) + (tcp_checksum - mqtt_protoname_0_0)) - ((tcp_seq - tcp_seq) * (tcp_connection_syn + http_referer_0_0)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    44,
+    39,
+    8,
+    61,
+    16,
+    16,
+    11,
+    39
+   ],
+   "n_unique_leaves": 6
+  },
+  {
+   "name": "BF_16",
+   "formula": "(udp_stream - tcp_ack_raw)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    17,
+    7
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_17",
+   "formula": "((icmp_seq_le - udp_stream) + (tcp_connection_rst + tcp_ack))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    3,
+    17,
+    10,
+    6
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_18",
+   "formula": "(((udp_stream + tcp_ack) + |tcp_seq|) + ((tcp_connection_rst + icmp_seq_le))^2)",
+   "depth": 3,
+   "n_ops": 6,
+   "leaves": [
+    17,
+    6,
+    16,
+    10,
+    3
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_19",
+   "formula": "(((http_referer_0_0 - dns_qry_name_len_0) - (tcp_checksum + http_request_method_0_0)) - (|http_referer_0| - (tcp_checksum)^2))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    39,
+    49,
+    8,
+    32,
+    38,
+    8
+   ],
+   "n_unique_leaves": 5
+  },
+  {
+   "name": "BF_20",
+   "formula": "|(udp_stream - icmp_seq_le)|",
+   "depth": 2,
+   "n_ops": 2,
+   "leaves": [
+    17,
+    3
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_21",
+   "formula": "((icmp_checksum - tcp_checksum) * |icmp_seq_le|)",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    2,
+    8,
+    3
+   ],
+   "n_unique_leaves": 3
+  },
+  {
+   "name": "BF_22",
+   "formula": "(((tcp_len - udp_stream) + |tcp_checksum|) + (|tcp_flags| + (mqtt_protoname_0_0 - icmp_seq_le)))",
+   "depth": 3,
+   "n_ops": 7,
+   "leaves": [
+    15,
+    17,
+    8,
+    13,
+    61,
+    3
+   ],
+   "n_unique_leaves": 6
+  },
+  {
+   "name": "BF_23",
+   "formula": "(tcp_checksum - icmp_seq_le)",
+   "depth": 1,
+   "n_ops": 1,
+   "leaves": [
+    8,
+    3
+   ],
+   "n_unique_leaves": 2
+  },
+  {
+   "name": "BF_24",
+   "formula": "((tcp_ack - tcp_ack_raw) + (tcp_connection_rst - http_referer_0))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    6,
+    7,
+    10,
+    38
+   ],
+   "n_unique_leaves": 4
+  },
+  {
+   "name": "BF_25",
+   "formula": "((tcp_ack + tcp_connection_rst) + (tcp_ack - http_referer_0_0))",
+   "depth": 2,
+   "n_ops": 3,
+   "leaves": [
+    6,
+    10,
+    6,
+    39
+   ],
+   "n_unique_leaves": 3
+  }
+ ],
+ "formula_mean_depth": 2.1923076923076925,
+ "formula_max_depth": 3,
+ "formula_mean_ops": 3.6153846153846154,
+ "formula_total_ops": 94,
+ "xai_shap_vs_pfi": {
+  "kendall_tau": 0.4769538948786536,
+  "spearman": 0.605210538212833,
+  "top5_jaccard": 0.1111111111111111,
+  "top10_jaccard": 0.1111111111111111
+ },
+ "xai_shap_vs_lime": {
+  "kendall_tau": 0.7405943938585637,
+  "spearman": 0.9096603137538338,
+  "top5_jaccard": 0.42857142857142855,
+  "top10_jaccard": 1.0
+ },
+ "xai_pfi_vs_lime": {
+  "kendall_tau": 0.38515051761475744,
+  "spearman": 0.5096405627934214,
+  "top5_jaccard": 0.0,
+  "top10_jaccard": 0.1111111111111111
+ },
+ "xai_local_shap_lime_spearman": 0.6226407921871219,
+ "xai_complexity_shap": {
+  "effective_n_features": 43.498929440262174,
+  "normalized_entropy": 0.8343460254581891,
+  "n_features_80pct": 30,
+  "n_features_total": 92
+ },
+ "xai_local_normalized_entropy": 0.7528075083734704,
+ "xai_deletion_insertion_shap": {
+  "deletion_auc": 0.18196928355166087,
+  "insertion_auc": 0.6805178473539243,
+  "deletion_auc_random": 0.43025386671547144,
+  "insertion_auc_random": 0.4380320940917815,
+  "deletion_gain": 0.24828458316381058,
+  "insertion_gain": 0.24248575326214278,
+  "deletion_curve": [
+   0.9283775359320352,
+   0.884366521345887,
+   0.5661377820083581,
+   0.4915836957000924,
+   0.3922966739262781,
+   0.23385789333508317,
+   0.13557515101646805,
+   0.07690249205552768,
+   0.0777256264321088,
+   0.07690249205552768,
+   0.07690249205552768,
+   0.07559788386762384,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778,
+   0.009475150952159778
+  ],
+  "insertion_curve": [
+   0.009475150952159778,
+   0.07905457674253667,
+   0.08501634417489443,
+   0.20914723836331242,
+   0.33532693293743276,
+   0.4030370912253538,
+   0.5610054518863951,
+   0.6317918254300109,
+   0.7403563326679213,
+   0.8720848100874996,
+   0.8730889555386824,
+   0.9291414500444702,
+   0.9291414500444702,
+   0.9283775359320352,
+   0.9283775359320352,
+   0.9283775359320352,
+   0.9283775359320352,
+   0.9283775359320352,
+   0.9283775359320352,
+   0.9283775359320352,
+   0.9283775359320352
+  ]
+ },
+ "xai_faithfulness_corr": 0.7300270026056616,
+ "xai_faithfulness_n": 100,
+ "xai_bootstrap_tau_mean": 0.9875128644939966,
+ "xai_generated_share": 0.509464724925823,
+ "time_xai_s": 53.58420752501115
+}

@@ -1,0 +1,98 @@
+BigFeat loaded from: /mnt/Projects/BigFeat
+
+============================================================
+[Device1] Loading data...
+[Device1] Fitting BigFeat on 154000 training samples, 20 features...
+[Device1] Done in 191.8s — 5 features generated.
+  BigFeat_Gen_0: ((HH_L1_weight * HH_L3_weight) - (HH_L1_weight - HH_L1_mean))
+  BigFeat_Gen_1: (HH_L1_std + HH_L5_magnitude)
+  BigFeat_Gen_2: (((HH_L1_magnitude * HH_L5_magnitude) * (HH_L3_magnitude * HH_L1_weight)) - ((HH_L5_weight + HH_L1_magnitude) - (HH_L1_weight + HH_L1_weight)))
+  BigFeat_Gen_3: (((HH_L1_magnitude * HH_L3_weight) - (HH_L3_weight - HH_L1_weight)) + ((HH_L1_magnitude + HH_L1_magnitude) + abs(HH_L1_weight)))
+  BigFeat_Gen_4: ((HH_L3_mean * HH_L3_mean) - abs(HH_L3_magnitude))
+[Device1] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device1_bigfeat_formulas.csv
+
+============================================================
+[Device2] Loading data...
+[Device2] Fitting BigFeat on 92400 training samples, 20 features...
+[Device2] Done in 126.6s — 3 features generated.
+  BigFeat_Gen_0: (HH_L5_magnitude - HH_L5_mean)
+  BigFeat_Gen_1: (((HH_L3_magnitude - HH_L1_weight) - (HH_L3_weight - HH_L1_std)) - (abs(HH_L3_mean)^2))
+  BigFeat_Gen_2: ((abs(HH_L3_mean) - (HH_L5_weight - HH_L3_weight)) + ((HH_L3_weight^2) - (HH_L1_weight - HH_L5_mean)))
+[Device2] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device2_bigfeat_formulas.csv
+
+============================================================
+[Device3] Loading data...
+[Device3] Fitting BigFeat on 84000 training samples, 20 features...
+[Device3] Done in 100.4s — 3 features generated.
+  BigFeat_Gen_0: ((HH_L3_weight + HH_L3_magnitude) + (HH_L5_weight^2))
+  BigFeat_Gen_1: (HH_L1_std + HH_L1_std)
+  BigFeat_Gen_2: (HH_L1_std + HH_L5_magnitude)
+[Device3] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device3_bigfeat_formulas.csv
+
+============================================================
+[Device4] Loading data...
+[Device4] Fitting BigFeat on 154000 training samples, 20 features...
+[Device4] Done in 197.0s — 3 features generated.
+  BigFeat_Gen_0: ((HH_L1_weight + HH_L1_weight) - abs(HH_L5_mean))
+  BigFeat_Gen_1: (HH_L5_magnitude - HH_L5_mean)
+  BigFeat_Gen_2: (abs((HH_L5_weight - HH_L1_magnitude)) - ((HH_L3_mean - HH_L1_std) - (HH_L5_mean - HH_L5_weight)))
+[Device4] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device4_bigfeat_formulas.csv
+
+============================================================
+[Device5] Loading data...
+[Device5] Fitting BigFeat on 154000 training samples, 20 features...
+[Device5] Done in 213.7s — 5 features generated.
+  BigFeat_Gen_0: ((HH_L1_weight - HH_L1_mean) * (HH_L1_std + HH_L3_magnitude))
+  BigFeat_Gen_1: ((HH_L1_weight - HH_L3_weight) - (HH_L1_magnitude - HH_L1_weight))
+  BigFeat_Gen_2: (HH_L1_mean - HH_L1_magnitude)
+  BigFeat_Gen_3: ((HH_L3_magnitude - HH_L5_weight) * (HH_L5_magnitude^2))
+  BigFeat_Gen_4: ((HH_L1_weight * HH_L1_magnitude) + (HH_L3_magnitude - HH_L1_magnitude))
+[Device5] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device5_bigfeat_formulas.csv
+
+============================================================
+[Device6] Loading data...
+[Device6] Fitting BigFeat on 154000 training samples, 20 features...
+[Device6] Done in 221.9s — 4 features generated.
+  BigFeat_Gen_0: (HH_L1_std + HH_L1_magnitude)
+  BigFeat_Gen_1: (HH_L1_magnitude + HH_L1_weight)
+  BigFeat_Gen_2: ((HH_L1_magnitude * HH_L3_magnitude) - (HH_L1_weight * HH_L3_magnitude))
+  BigFeat_Gen_3: ((abs(HH_L3_mean) - abs(HH_L1_std)) + ((HH_L1_magnitude * HH_L3_magnitude)^2))
+[Device6] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device6_bigfeat_formulas.csv
+
+============================================================
+[Device7] Loading data...
+[Device7] Fitting BigFeat on 84000 training samples, 20 features...
+[Device7] Done in 98.5s — 3 features generated.
+  BigFeat_Gen_0: (HH_L1_std + HH_L5_magnitude)
+  BigFeat_Gen_1: (HH_L1_weight + HH_L1_magnitude)
+  BigFeat_Gen_2: ((HH_L1_std * HH_L5_weight) + (HH_L3_magnitude^2))
+[Device7] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device7_bigfeat_formulas.csv
+
+============================================================
+[Device8] Loading data...
+[Device8] Fitting BigFeat on 154000 training samples, 20 features...
+[Device8] Done in 216.5s — 6 features generated.
+  BigFeat_Gen_0: ((HH_L5_weight + HH_L3_mean) * (HH_L1_mean - HH_L1_magnitude))
+  BigFeat_Gen_1: ((HH_L3_magnitude - HH_L3_mean) - (HH_L1_weight - HH_L3_magnitude))
+  BigFeat_Gen_2: (abs(HH_L1_magnitude) * (HH_L1_weight - HH_L1_mean))
+  BigFeat_Gen_3: ((HH_L3_magnitude - HH_L3_mean) + (HH_L1_magnitude * HH_L3_mean))
+  BigFeat_Gen_4: ((HH_L3_magnitude - HH_L1_weight) + abs(HH_L3_mean))
+  BigFeat_Gen_5: (((HH_L1_weight * HH_L1_magnitude) - (HH_L5_mean - HH_L1_weight)) - abs((HH_L1_magnitude - HH_L1_weight)))
+[Device8] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device8_bigfeat_formulas.csv
+
+============================================================
+[Device9] Loading data...
+[Device9] Fitting BigFeat on 146300 training samples, 20 features...
+[Device9] Done in 192.3s — 5 features generated.
+  BigFeat_Gen_0: (abs((HH_L3_mean - HH_L1_weight)) - abs((HH_L1_magnitude + HH_L1_magnitude)))
+  BigFeat_Gen_1: (HH_L5_mean - HH_L5_magnitude)
+  BigFeat_Gen_2: abs(((HH_L5_mean - HH_L3_magnitude)^2))
+  BigFeat_Gen_3: (abs(abs(HH_L1_mean)) - ((HH_L1_magnitude - HH_L1_weight) + (HH_L3_magnitude - HH_L1_weight)))
+  BigFeat_Gen_4: ((HH_L5_mean^2) - abs(HH_L3_magnitude))
+[Device9] Per-device CSV saved → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/Device9_bigfeat_formulas.csv
+
+Master CSV saved  → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/bigfeat_formulas.csv
+Text log saved    → /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas/bigfeat_formulas.txt
+
+Output directory: /home/victoryst/personal/dev/XAI_IoT_with_BigFeat/IoT/../Results/IoT/Feature_Importance/BigFeat_Formulas
+Done.
