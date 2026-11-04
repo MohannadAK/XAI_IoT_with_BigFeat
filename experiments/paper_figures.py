@@ -39,7 +39,7 @@ plt.rcParams.update({"font.size": 8, "axes.titlesize": 9, "axes.labelsize": 8.5,
 NAME = dict(original="Baseline (ExtraTrees)", split10="ExtraTrees, split 10", split_grid="ExtraTrees, CV grid", lgbm="LightGBM",
             bigfeat="BigFeat (scaled)", bigfeat_raw="BigFeat (unscaled)", tpot="TPOT (ExtraTrees)",
             both="BigFeat (scaled) + TPOT", both_raw="BigFeat (unscaled) + TPOT",
-            bigfeat_auto="BigFeat, model chosen", tpot_auto="TPOT, full search")
+            bigfeat_auto="BigFeat + model selection", tpot_auto="TPOT, full search")
 ORDER = ["split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
 # One colour per kind of change: cheap manual choice, BigFeat, TPOT, both, tool picks the model.
 GROUP = dict(original="#4D4D4D", split10="#1F5FA8", split_grid="#1F5FA8", lgbm="#1F5FA8", bigfeat="#2E8B3E", bigfeat_raw="#2E8B3E",

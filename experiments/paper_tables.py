@@ -11,6 +11,7 @@ import sys
 
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyze as A  # noqa: E402
@@ -23,13 +24,11 @@ ORDER = ["original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", 
          "tpot_auto"]
 NAME = dict(original="Baseline", split10="ExtraTrees, split 10", split_grid="ExtraTrees, CV grid", lgbm="LightGBM", bigfeat="BigFeat (scaled)",
             bigfeat_raw="BigFeat (unscaled)", tpot="TPOT (ExtraTrees)", both="BigFeat (scaled) + TPOT",
-            both_raw="BigFeat (unscaled) + TPOT", bigfeat_auto="BigFeat, model chosen",
+            both_raw="BigFeat (unscaled) + TPOT", bigfeat_auto="BigFeat + model selection",
             tpot_auto="TPOT, full search")
-# (dataset, automated configuration, configuration that matches it) as in the cost-to-match table
-COST_TO_MATCH = [("nbaiot", "tpot", "original"), ("nbaiot", "bigfeat_raw", "original"),
-                 ("edgeiiot", "tpot", "split_grid"), ("edgeiiot", "tpot", "split10"), ("edgeiiot", "both_raw", "lgbm"),
-                 ("edgeiiot", "bigfeat_auto", "lgbm"), ("edgeiiot", "tpot_auto", "lgbm"),
-                 ("unswnb15", "bigfeat_auto", "lgbm"), ("unswnb15", "tpot_auto", "lgbm")]
+AUTOMATED = ["bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
+# Within-family comparison reported alongside the cost to match: TPOT (ExtraTrees) vs ExtraTrees, CV grid
+WITHIN_FAMILY = [("edgeiiot", "tpot", "split_grid"), ("edgeiiot", "tpot", "split10")]
 
 
 def load():
@@ -56,6 +55,25 @@ def md(df):
 def has(runs, ds, c):
     """True once all five seeds of configuration c have finished on dataset ds."""
     return runs[(runs.dataset == ds) & (runs.config == c)].seed.nunique() == 5
+
+
+def diff_test(runs, ds, a, b, rope=A.ROPE_F1):
+    """Difference a - b in Macro-F1 with p-value and Bayesian posteriors (P_rope, P_a_better).
+    Single-task datasets: corrected resampled t-test and Bayesian correlated t-test over seeds;
+    N-BaIoT: Wilcoxon signed-rank and Bayesian signed-rank test over the seed-averaged device scores."""
+    s = runs[runs.dataset == ds]
+    if ds == "nbaiot":
+        dev = s.groupby(["config", "unit"]).f1_macro.mean().unstack()
+        d = (dev.loc[a] - dev.loc[b]).values
+        pv = stats.wilcoxon(d).pvalue if np.any(d != 0) else 1.0
+        _, pm, pr = A.bayes_signed_rank(d, rope)
+    else:
+        x = s[s.config == a].set_index("seed").f1_macro
+        y = s[s.config == b].set_index("seed").f1_macro
+        d = (x - y).dropna().values
+        pv = A.corrected_t(d)[1]
+        _, pm, pr = A.bayes_corr_t(d, rope)
+    return d.mean(), pv, pm, pr
 
 
 def pair(runs, ds, a, b, metric="f1_macro"):
@@ -109,7 +127,10 @@ def main():
         if not has(runs, ds, c):
             continue
         m, w, p = pair(runs, ds, c, "lgbm")
-        rows.append(dict(dataset=ds, configuration=NAME[c], dF1=f"{m:+.4f}", wins=f"{w}/5", p=f"{p:.3f}"))
+        _, _, pm, pr = diff_test(runs, ds, c, "lgbm")
+        pw_ = 1 - pm - pr
+        rows.append(dict(dataset=ds, configuration=NAME[c], dF1=f"{m:+.4f}", wins=f"{w}/5", p=f"{p:.3f}",
+                         P_better=f"{pr:.2f}", P_rope=f"{pm:.2f}", P_worse=f"{pw_:.2f}"))
     m, w, p = pair(runs, "edgeiiot", "tpot", "split10")
     rows.append(dict(dataset="edgeiiot", configuration="TPOT (ExtraTrees) vs ExtraTrees, split 10", dF1=f"{m:+.4f}",
                      wins=f"{w}/5", p=f"{p:.3f}"))
@@ -122,26 +143,35 @@ def main():
         for ds, _, name in TASKS:
             s = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
             if c in s:
-                r[f"{name} s"] = f"{s[c]:,.0f}"
+                r[f"{name} s"] = f"{s[c]:,.1f}"
                 r[f"{name} x"] = f"{s[c] / s['original']:.1f}"
         rows.append(r)
     out += ["## Training time (s) and ratio to the baseline", "", md(pd.DataFrame(rows)), ""]
 
-    # Cost to match
+    # Cost to match: for every automated configuration, the least expensive configuration (other than split10) whose
+    # Macro-F1 is not significantly lower (corrected resampled t-test; N-BaIoT: Wilcoxon over devices), with
+    # the Bayesian posteriors that the automated configuration is practically better / equivalent.
     rows = []
-    for ds, c, m in COST_TO_MATCH:
-        if not has(runs, ds, c):
-            continue
-        s = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
-        if ds == "nbaiot":
-            p = pw[(pw.dataset == ds) & (pw.feature_mode == "infold20") & (pw.metric == "f1_macro") & (pw.config == c)]
-            test = f"P_ROPE={p.p_rope.iloc[0]:.2f}"
-        else:
-            d, _, pv = pair(runs, ds, c, m)
-            test = f"{d:+.4f}, p={pv:.3f}"
-        rows.append(dict(dataset=ds, automated=NAME[c], matched_by=NAME[m], difference=test,
-                         cost_to_match=f"{s[c] / s[m]:,.0f}x"))
-    out += ["## Cost to match", "", md(pd.DataFrame(rows)), ""]
+    for ds, _, name in TASKS:
+        t = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
+        for a in [c for c in AUTOMATED if has(runs, ds, c)]:
+            # split10 is excluded as a match: its setting was chosen after inspecting TPOT's selections.
+            for c in sorted([c for c in ORDER if c not in (a, "split10") and c in t.index], key=lambda c: t[c]):
+                d, pv, pm, pr = diff_test(runs, ds, a, c)
+                if not (d > 0 and pv < 0.05):
+                    rows.append(dict(dataset=name, automated=NAME[a], matched_by=NAME[c], dF1=f"{d:+.4f}",
+                                     p=f"{pv:.3f}", P_auto_better=f"{pr:.2f}", P_rope=f"{pm:.2f}",
+                                     time_auto=f"{t[a]:,.1f}", time_match=f"{t[c]:,.1f}",
+                                     cost_to_match=f"{t[a] / t[c]:,.0f}x"))
+                    break
+    for ds, a, c in WITHIN_FAMILY:
+        t = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
+        d, pv, pm, pr = diff_test(runs, ds, a, c)
+        rows.append(dict(dataset=ds + " (within ExtraTrees)", automated=NAME[a], matched_by=NAME[c], dF1=f"{d:+.4f}",
+                         p=f"{pv:.3f}", P_auto_better=f"{pr:.2f}", P_rope=f"{pm:.2f}", time_auto=f"{t[a]:,.1f}",
+                         time_match=f"{t[c]:,.1f}", cost_to_match=f"{t[a] / t[c]:,.0f}x"))
+    out += ["## Cost to match (dF1 = automated - matching configuration; p uncorrected)", "",
+            md(pd.DataFrame(rows)), ""]
 
     # Explanation quality
     cols = dict(agree_shap_pfi_tau__mean="tau_SHAP_PFI", faithfulness_corr__mean="faithfulness",

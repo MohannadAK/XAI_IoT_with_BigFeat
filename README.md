@@ -1,7 +1,7 @@
 # Is AutoML Worth Its Cost for IoT Intrusion Detection?
 
 Code and results for *Is AutoML Worth Its Cost for IoT Intrusion Detection? An Empirical Evaluation of
-Automated Feature Engineering and Pipeline Search against Low-Cost Baselines*.
+Automated Feature Engineering (BigFeat) and Evolutionary Pipeline Search (TPOT) against Low-Cost Baselines*.
 
 The study compares automated feature engineering ([BigFeat](https://github.com/DataSystemsGroupUT/BigFeat))
 and evolutionary pipeline search ([TPOT](https://github.com/EpistasisLab/tpot)) with low-cost default tree
@@ -50,9 +50,10 @@ tables and figures and `logs/`.
 | Dataset upper bounds | `results/ceiling.csv` |
 | All table values | `results/paper_tables.md` |
 
-The CIC-IoT-2023 runs are **not used in the paper**. The 8-class grid in round 2 is complete; the
-34-class grid in round 3 is incomplete because fully grown ExtraTrees models exceeded the memory of the
-test machine. Both are kept for transparency. `results/round2/_archive_lgbm_default_diverged/` holds
+The CIC-IoT-2023 runs were exploratory and are **not used in the paper**. The 8-class grid in round 2 is
+complete and agrees with the paper's conclusions (default LightGBM is best, BigFeat gives no gain, and
+TPOT's gain equals that of `split10`); the 34-class grid in round 3 is incomplete because fully grown
+ExtraTrees models exceeded the memory of the test machine. Both are kept for transparency. `results/round2/_archive_lgbm_default_diverged/` holds
 LightGBM runs with default settings that diverged; they were repeated with `max_delta_step=1`.
 
 ### Configurations
@@ -68,7 +69,7 @@ LightGBM runs with default settings that diverged; they were repeated with `max_
 | `tpot` | TPOT (ExtraTrees) | TPOT search over ExtraTrees hyperparameters |
 | `both` | BigFeat (scaled) + TPOT | `bigfeat` features → TPOT (ExtraTrees) |
 | `both_raw` | BigFeat (unscaled) + TPOT | `bigfeat_raw` features → TPOT (ExtraTrees) |
-| `bigfeat_auto` | BigFeat, model chosen | BigFeat features → LightGBM, random forest or logistic regression, chosen by 3-fold CV Macro-F1 |
+| `bigfeat_auto` | BigFeat + model selection | BigFeat features → LightGBM, random forest or logistic regression, chosen by 3-fold CV Macro-F1 (re-implementation of BigFeat's selector, which uses binary F1; decision tree omitted) |
 | `tpot_auto` | TPOT, full search | TPOT default search space (scaler → selector → transformer → 17 classifiers) |
 
 ## Installation
