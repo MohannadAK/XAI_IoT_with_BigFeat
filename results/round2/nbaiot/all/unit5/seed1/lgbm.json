@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.692018359899521e-06,
- "time_featgen_s": 2.0929728634655476e-06,
- "time_fit_s": 33.94657141098287,
- "train_time_s": 33.94658019597409,
- "train_cpu_s": 33.94273220900004,
- "infer_ms_per_1k": 41.3653884695095,
+ "time_prep_s": 6.532000043080188e-06,
+ "time_featgen_s": 1.6430003597633913e-06,
+ "time_fit_s": 33.42249231099959,
+ "train_time_s": 33.42250048599999,
+ "train_cpu_s": 33.41996425900004,
+ "infer_ms_per_1k": 41.769023999994246,
  "model_size_mb": 3.633691,
  "n_tree_nodes": 60786,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.42316976605472995,
   "spearman": 0.5127119640715613,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.5384615384615384
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.3797619463195297,
-  "spearman": 0.540685161870058,
-  "top5_jaccard": 0.25,
+  "kendall_tau": 0.38713596469466616,
+  "spearman": 0.5428649777418673,
+  "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.3333333333333333
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.38836301795187916,
-  "spearman": 0.47988676323341944,
-  "top5_jaccard": 0.25,
+  "kendall_tau": 0.3890002009181661,
+  "spearman": 0.4816095512255142,
+  "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.42857142857142855
  },
- "xai_local_shap_lime_spearman": 0.15002400014380704,
+ "xai_local_shap_lime_spearman": 0.1423067689513261,
  "xai_complexity_shap": {
   "effective_n_features": 25.237952378723776,
   "normalized_entropy": 0.6803783112182621,
@@ -281,9 +282,11 @@
    0.9959435341279709
   ]
  },
- "xai_faithfulness_corr": 0.4935524123257264,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.6499097749999173,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.4935524123257264,
  "xai_bootstrap_tau_mean": 0.9801361386138613,
  "xai_generated_share": 0.0,
- "time_xai_s": 45.987672200019006
+ "time_xai_s": 46.27122850199976
 }

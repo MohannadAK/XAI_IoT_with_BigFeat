@@ -84,18 +84,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.611982826143503e-06,
- "time_featgen_s": 1.9529834389686584e-06,
- "time_fit_s": 12.219503766973503,
- "train_time_s": 12.219512331939768,
- "train_cpu_s": 12.218424307999953,
- "infer_ms_per_1k": 20.80506800040085,
+ "time_prep_s": 6.852999831608031e-06,
+ "time_featgen_s": 1.7029997252393514e-06,
+ "time_fit_s": 12.183745172999807,
+ "train_time_s": 12.183753728999363,
+ "train_cpu_s": 12.18267296900001,
+ "infer_ms_per_1k": 21.720154277772963,
  "model_size_mb": 2.032918,
  "n_tree_nodes": 34094,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.3996736868193288,
   "spearman": 0.4849649426169088,
@@ -103,18 +104,18 @@
   "top10_jaccard": 0.3333333333333333
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.3807890357360786,
-  "spearman": 0.5463389074570751,
+  "kendall_tau": 0.3829421239833747,
+  "spearman": 0.5404379638057336,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.6666666666666666
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.3626777791828293,
-  "spearman": 0.4511536768971581,
+  "kendall_tau": 0.3588534089278258,
+  "spearman": 0.445860207110948,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.3333333333333333
  },
- "xai_local_shap_lime_spearman": 0.16129443369119292,
+ "xai_local_shap_lime_spearman": 0.1641593534372029,
  "xai_complexity_shap": {
   "effective_n_features": 18.946292625746768,
   "normalized_entropy": 0.6199473866027437,
@@ -176,9 +177,11 @@
    0.9985742599030994
   ]
  },
- "xai_faithfulness_corr": 0.46194662196038616,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.5492718946046484,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.46194662196038616,
  "xai_bootstrap_tau_mean": 0.9862697674418606,
  "xai_generated_share": 0.0,
- "time_xai_s": 24.095301688998006
+ "time_xai_s": 24.099299083000005
 }

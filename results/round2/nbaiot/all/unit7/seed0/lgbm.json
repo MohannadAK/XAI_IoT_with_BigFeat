@@ -84,18 +84,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.191025022417307e-06,
- "time_featgen_s": 2.1239975467324257e-06,
- "time_fit_s": 12.42698853398906,
- "train_time_s": 12.42699684901163,
- "train_cpu_s": 12.426000377000008,
- "infer_ms_per_1k": 20.455776417899568,
+ "time_prep_s": 6.823000148870051e-06,
+ "time_featgen_s": 2.0440002117538825e-06,
+ "time_fit_s": 12.225907172999541,
+ "train_time_s": 12.225916039999902,
+ "train_cpu_s": 12.22524945500004,
+ "infer_ms_per_1k": 20.62121147221458,
  "model_size_mb": 2.03764,
  "n_tree_nodes": 34184,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.3174161627258658,
   "spearman": 0.38069127612532977,
@@ -103,18 +104,18 @@
   "top10_jaccard": 0.6666666666666666
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.31319176245929414,
-  "spearman": 0.439488061109612,
+  "kendall_tau": 0.2964716881411509,
+  "spearman": 0.41669480991147,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.5384615384615384
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.29654608392530263,
-  "spearman": 0.36408824290891245,
+  "kendall_tau": 0.2946359642220801,
+  "spearman": 0.3617334738894802,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.3333333333333333
  },
- "xai_local_shap_lime_spearman": 0.19286228079566237,
+ "xai_local_shap_lime_spearman": 0.19083570331434116,
  "xai_complexity_shap": {
   "effective_n_features": 18.74905151898473,
   "normalized_entropy": 0.617741853031281,
@@ -176,9 +177,11 @@
    0.9985026086839744
   ]
  },
- "xai_faithfulness_corr": 0.4542933683555374,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.5371147268940376,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.4542933683555374,
  "xai_bootstrap_tau_mean": 0.9872490180675568,
  "xai_generated_share": 0.0,
- "time_xai_s": 23.751927283999976
+ "time_xai_s": 24.011600122000345
 }

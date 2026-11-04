@@ -309,18 +309,19 @@
  "n_features_original": 66,
  "n_features_generated": 0,
  "n_features_model": 66,
- "time_prep_s": 7.404014468193054e-06,
- "time_featgen_s": 1.6129924915730953e-06,
- "time_fit_s": 7.035961556015536,
- "train_time_s": 7.035970573022496,
- "train_cpu_s": 7.035042164000004,
- "infer_ms_per_1k": 45.383900441230786,
+ "time_prep_s": 7.544000254711136e-06,
+ "time_featgen_s": 1.663000148255378e-06,
+ "time_fit_s": 7.037552310000137,
+ "train_time_s": 7.03756151700054,
+ "train_cpu_s": 7.0367675260000055,
+ "infer_ms_per_1k": 44.89675955213317,
  "model_size_mb": 5.141338,
  "n_tree_nodes": 89166,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.7829380130700732,
   "spearman": 0.8649355168643724,
@@ -328,18 +329,18 @@
   "top10_jaccard": 0.8181818181818182
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.5739769217679697,
-  "spearman": 0.7318190949282772,
+  "kendall_tau": 0.5685518090858528,
+  "spearman": 0.7288536269150605,
   "top5_jaccard": 0.25,
   "top10_jaccard": 0.5384615384615384
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.5533673289604792,
-  "spearman": 0.6868451142036208,
+  "kendall_tau": 0.5444727909519296,
+  "spearman": 0.6799248876438932,
   "top5_jaccard": 0.25,
   "top10_jaccard": 0.5384615384615384
  },
- "xai_local_shap_lime_spearman": 0.2530248459764093,
+ "xai_local_shap_lime_spearman": 0.26642885492006957,
  "xai_complexity_shap": {
   "effective_n_features": 14.082825017061865,
   "normalized_entropy": 0.631306428305195,
@@ -401,9 +402,11 @@
    0.9191347871789008
   ]
  },
- "xai_faithfulness_corr": 0.2801896886507228,
- "xai_faithfulness_n": 100,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.5405458616532451,
+ "xai_faithfulness_n": 93,
+ "xai_faithfulness_corr_proba": 0.2801896886507228,
  "xai_bootstrap_tau_mean": 0.9936363636363638,
  "xai_generated_share": 0.0,
- "time_xai_s": 34.917705926985946
+ "time_xai_s": 34.700427574999594
 }

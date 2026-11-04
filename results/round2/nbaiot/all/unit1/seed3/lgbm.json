@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.7730434238910675e-06,
- "time_featgen_s": 1.693028025329113e-06,
- "time_fit_s": 33.563635451951995,
- "train_time_s": 33.563643918023445,
- "train_cpu_s": 33.56113658700008,
- "infer_ms_per_1k": 45.944377226987854,
+ "time_prep_s": 6.281999958446249e-06,
+ "time_featgen_s": 2.1340001694625244e-06,
+ "time_fit_s": 34.23331111399966,
+ "train_time_s": 34.23331952999979,
+ "train_cpu_s": 34.229030482999974,
+ "infer_ms_per_1k": 46.40397763636649,
  "model_size_mb": 3.661631,
  "n_tree_nodes": 61076,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.3382772371159882,
   "spearman": 0.4076748255533275,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.42857142857142855
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.3860179643366548,
-  "spearman": 0.5490958409702187,
-  "top5_jaccard": 0.42857142857142855,
+  "kendall_tau": 0.37156151467623827,
+  "spearman": 0.5261951239083188,
+  "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.5384615384615384
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.2541872158795402,
-  "spearman": 0.3122396744669073,
-  "top5_jaccard": 0.1111111111111111,
+  "kendall_tau": 0.2198476801072675,
+  "spearman": 0.27239234437826115,
+  "top5_jaccard": 0.25,
   "top10_jaccard": 0.3333333333333333
  },
- "xai_local_shap_lime_spearman": 0.15943918575787697,
+ "xai_local_shap_lime_spearman": 0.1561129291502425,
  "xai_complexity_shap": {
   "effective_n_features": 22.422353734084698,
   "normalized_entropy": 0.6554484472437514,
@@ -281,9 +282,11 @@
    0.999530869795209
   ]
  },
- "xai_faithfulness_corr": 0.6012884506661406,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.744953664717901,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.6012884506661406,
  "xai_bootstrap_tau_mean": 0.9880186046511628,
  "xai_generated_share": 0.0,
- "time_xai_s": 49.465127089002635
+ "time_xai_s": 50.70654699499937
 }

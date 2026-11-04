@@ -36,15 +36,15 @@ plt.rcParams.update({"font.size": 8, "axes.titlesize": 9, "axes.labelsize": 8.5,
                      "ytick.labelsize": 8, "legend.fontsize": 7.5, "pdf.fonttype": 42})
 
 # Names as in the manuscript's configuration table (Table 2).
-NAME = dict(original="Baseline (ExtraTrees)", split10="ExtraTrees, split 10", lgbm="LightGBM",
+NAME = dict(original="Baseline (ExtraTrees)", split10="ExtraTrees, split 10", split_grid="ExtraTrees, CV grid", lgbm="LightGBM",
             bigfeat="BigFeat (scaled)", bigfeat_raw="BigFeat (unscaled)", tpot="TPOT (ExtraTrees)",
             both="BigFeat (scaled) + TPOT", both_raw="BigFeat (unscaled) + TPOT",
             bigfeat_auto="BigFeat, model chosen", tpot_auto="TPOT, full search")
-ORDER = ["split10", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
+ORDER = ["split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
 # One colour per kind of change: cheap manual choice, BigFeat, TPOT, both, tool picks the model.
-GROUP = dict(original="#4D4D4D", split10="#1F5FA8", lgbm="#1F5FA8", bigfeat="#2E8B3E", bigfeat_raw="#2E8B3E",
+GROUP = dict(original="#4D4D4D", split10="#1F5FA8", split_grid="#1F5FA8", lgbm="#1F5FA8", bigfeat="#2E8B3E", bigfeat_raw="#2E8B3E",
              tpot="#C0392B", both="#7B4FA0", both_raw="#7B4FA0", bigfeat_auto="#B8860B", tpot_auto="#B8860B")
-MARK = dict(original="o", split10="v", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*",
+MARK = dict(original="o", split10="v", split_grid="<", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*",
             bigfeat_auto="p", tpot_auto="h")
 DATASETS = [("nbaiot", "infold20", "N-BaIoT"), ("edgeiiot", "all", "Edge-IIoTset"), ("unswnb15", "all", "UNSW-NB15")]
 
@@ -135,11 +135,11 @@ def fig_pareto(summ, par):
     for ax, (ds, title) in zip(axes, [("edgeiiot", "Edge-IIoTset"), ("unswnb15", "UNSW-NB15")]):
         s = summ[summ.dataset == ds].set_index("config")
         p = par[par.dataset == ds].set_index("config")
-        bx, by = s.loc["original", "train_time_s__mean"], s.loc["original", "seed_stability_tau_common"]
+        bx, by = s.loc["original", "train_time_s__mean"], s.loc["original", "seed_stability_tau"]
         for c in ["original"] + ORDER:
             if c not in s.index:
                 continue
-            x, yv = s.loc[c, "train_time_s__mean"], s.loc[c, "seed_stability_tau_common"]
+            x, yv = s.loc[c, "train_time_s__mean"], s.loc[c, "seed_stability_tau"]
             if c != "original":
                 ax.plot([bx, x], [by, yv], color="#C8C8C8", lw=0.6, zorder=0)
             opt = bool(p.loc[c, "pareto_optimal"])

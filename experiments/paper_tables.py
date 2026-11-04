@@ -19,15 +19,16 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, "results")
 OUT = os.path.join(RES, "paper_tables.md")
 TASKS = [("nbaiot", "infold20", "N-BaIoT"), ("edgeiiot", "all", "Edge-IIoTset"), ("unswnb15", "all", "UNSW-NB15")]
-ORDER = ["original", "split10", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto",
+ORDER = ["original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto",
          "tpot_auto"]
-NAME = dict(original="Baseline", split10="ExtraTrees, split 10", lgbm="LightGBM", bigfeat="BigFeat (scaled)",
+NAME = dict(original="Baseline", split10="ExtraTrees, split 10", split_grid="ExtraTrees, CV grid", lgbm="LightGBM", bigfeat="BigFeat (scaled)",
             bigfeat_raw="BigFeat (unscaled)", tpot="TPOT (ExtraTrees)", both="BigFeat (scaled) + TPOT",
             both_raw="BigFeat (unscaled) + TPOT", bigfeat_auto="BigFeat, model chosen",
             tpot_auto="TPOT, full search")
 # (dataset, automated configuration, configuration that matches it) as in the cost-to-match table
 COST_TO_MATCH = [("nbaiot", "tpot", "original"), ("nbaiot", "bigfeat_raw", "original"),
-                 ("edgeiiot", "tpot", "split10"), ("edgeiiot", "both_raw", "lgbm"),
+                 ("edgeiiot", "tpot", "split_grid"), ("edgeiiot", "tpot", "split10"), ("edgeiiot", "both_raw", "lgbm"),
+                 ("edgeiiot", "bigfeat_auto", "lgbm"), ("edgeiiot", "tpot_auto", "lgbm"),
                  ("unswnb15", "bigfeat_auto", "lgbm"), ("unswnb15", "tpot_auto", "lgbm")]
 
 
@@ -52,6 +53,11 @@ def md(df):
     return "\n".join(rows)
 
 
+def has(runs, ds, c):
+    """True once all five seeds of configuration c have finished on dataset ds."""
+    return runs[(runs.dataset == ds) & (runs.config == c)].seed.nunique() == 5
+
+
 def pair(runs, ds, a, b, metric="f1_macro"):
     """Mean difference a - b over seeds and the corrected resampled t-test p (single-task datasets)."""
     s = runs[runs.dataset == ds]
@@ -71,7 +77,9 @@ def main():
     ceil = pd.read_csv(os.path.join(RES, "ceiling.csv"))
     rows = []
     for ds, fm, name in TASKS:
-        c = ceil[(ceil.dataset == ds) & ceil.feature_mode.isin(["raw115_seed0", "all_seed0"])].max_macro_f1.mean()
+        # N-BaIoT: bound on the 20 features each run selected, averaged over devices and seeds
+        modes = [f"infold20_seed{k}" for k in range(5)] if ds == "nbaiot" else ["all_seed0"]
+        c = ceil[(ceil.dataset == ds) & ceil.feature_mode.isin(modes)].max_macro_f1.mean()
         b = summ[(summ.dataset == ds) & (summ.config == "original")].f1_macro__mean.mean()
         rows.append(dict(dataset=name, upper_bound=round(c, 4), baseline=round(b, 4), headroom=round(c - b, 4)))
     out += ["## Datasets: upper bound on Macro-F1 and baseline", "", md(pd.DataFrame(rows)), ""]
@@ -95,8 +103,11 @@ def main():
 
     # Comparisons with LightGBM
     rows = []
-    for ds, c in [("edgeiiot", "tpot"), ("edgeiiot", "split10"), ("edgeiiot", "both_raw"), ("unswnb15", "bigfeat_auto"),
-                  ("unswnb15", "tpot_auto")]:
+    for ds, c in [("edgeiiot", "tpot"), ("edgeiiot", "split10"), ("edgeiiot", "split_grid"), ("edgeiiot", "both_raw"),
+                  ("edgeiiot", "bigfeat_auto"), ("edgeiiot", "tpot_auto"), ("unswnb15", "split_grid"),
+                  ("unswnb15", "bigfeat_auto"), ("unswnb15", "tpot_auto")]:
+        if not has(runs, ds, c):
+            continue
         m, w, p = pair(runs, ds, c, "lgbm")
         rows.append(dict(dataset=ds, configuration=NAME[c], dF1=f"{m:+.4f}", wins=f"{w}/5", p=f"{p:.3f}"))
     m, w, p = pair(runs, "edgeiiot", "tpot", "split10")
@@ -119,6 +130,8 @@ def main():
     # Cost to match
     rows = []
     for ds, c, m in COST_TO_MATCH:
+        if not has(runs, ds, c):
+            continue
         s = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
         if ds == "nbaiot":
             p = pw[(pw.dataset == ds) & (pw.feature_mode == "infold20") & (pw.metric == "f1_macro") & (pw.config == c)]
@@ -133,7 +146,7 @@ def main():
     # Explanation quality
     cols = dict(agree_shap_pfi_tau__mean="tau_SHAP_PFI", faithfulness_corr__mean="faithfulness",
                 deletion_gain__mean="deletion", insertion_gain__mean="insertion",
-                seed_stability_tau_common="stability", effective_n_features__mean="effective_features",
+                seed_stability_tau="stability", effective_n_features__mean="effective_features",
                 generated_share__mean="generated_share")
     rows = []
     for ds, _, name in TASKS:

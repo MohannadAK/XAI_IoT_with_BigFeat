@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.71198358759284e-06,
- "time_featgen_s": 1.7339480109512806e-06,
- "time_fit_s": 31.60243706201436,
- "train_time_s": 31.60244550794596,
- "train_cpu_s": 31.59976306899989,
- "infer_ms_per_1k": 40.12698018182577,
+ "time_prep_s": 6.4719997681095265e-06,
+ "time_featgen_s": 2.1440000637085177e-06,
+ "time_fit_s": 33.06394843099952,
+ "train_time_s": 33.06395704699935,
+ "train_cpu_s": 33.062567861999696,
+ "infer_ms_per_1k": 40.866448454545946,
  "model_size_mb": 3.64184,
  "n_tree_nodes": 60844,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.3832289160183137,
   "spearman": 0.4610212611064978,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.6666666666666666
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.32774441973619656,
-  "spearman": 0.46374495391540993,
+  "kendall_tau": 0.37418907061992773,
+  "spearman": 0.5286396581683639,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.5384615384615384
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.33288322243917834,
-  "spearman": 0.4071255504872841,
+  "kendall_tau": 0.34937036317319425,
+  "spearman": 0.426516918939267,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.5384615384615384
  },
- "xai_local_shap_lime_spearman": 0.1184045999298093,
+ "xai_local_shap_lime_spearman": 0.14246059880674028,
  "xai_complexity_shap": {
   "effective_n_features": 18.931524368632594,
   "normalized_entropy": 0.6197830462115725,
@@ -281,9 +282,11 @@
    1.0
   ]
  },
- "xai_faithfulness_corr": 0.5448876736444966,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.6731133838556517,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.5448876736444966,
  "xai_bootstrap_tau_mean": 0.9857093479968576,
  "xai_generated_share": 0.0,
- "time_xai_s": 44.517519615998026
+ "time_xai_s": 45.396925093999926
 }

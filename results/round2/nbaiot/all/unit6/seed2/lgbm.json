@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.3820043578743935e-06,
- "time_featgen_s": 2.0730076357722282e-06,
- "time_fit_s": 32.28215853800066,
- "train_time_s": 32.28216699301265,
- "train_cpu_s": 32.27958467900021,
- "infer_ms_per_1k": 40.8787426369434,
+ "time_prep_s": 6.121000296843704e-06,
+ "time_featgen_s": 1.8939999790745787e-06,
+ "time_fit_s": 32.099671308000325,
+ "train_time_s": 32.0996793230006,
+ "train_cpu_s": 32.096660069999984,
+ "infer_ms_per_1k": 42.02712657575886,
  "model_size_mb": 3.618664,
  "n_tree_nodes": 60354,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.42243710772413223,
   "spearman": 0.5031536363758397,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.8181818181818182
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.36459050943729,
-  "spearman": 0.4949442548872507,
+  "kendall_tau": 0.32681552671852193,
+  "spearman": 0.4495080724398609,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.6666666666666666
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.40200178037761697,
-  "spearman": 0.4889740143568074,
+  "kendall_tau": 0.3898739538178663,
+  "spearman": 0.474879179700443,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.6666666666666666
  },
- "xai_local_shap_lime_spearman": 0.11961794792438221,
+ "xai_local_shap_lime_spearman": 0.10972096726919914,
  "xai_complexity_shap": {
   "effective_n_features": 17.34600237599674,
   "normalized_entropy": 0.6013493959550376,
@@ -281,9 +282,11 @@
    1.0
   ]
  },
- "xai_faithfulness_corr": 0.6376294445626141,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.7373388984418335,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.6376294445626141,
  "xai_bootstrap_tau_mean": 0.9802859387274155,
  "xai_generated_share": 0.0,
- "time_xai_s": 45.51678529701894
+ "time_xai_s": 46.108773625999675
 }

@@ -28,6 +28,7 @@ results/
   ceiling.csv           upper bound on Macro-F1 per dataset
   paper_tables.md       the paper's tables, regenerated from the files below
   figures/              the paper's figures
+  review_logs/          script and log of the additional runs (LightGBM reruns, CV grid, model choice on Edge-IIoTset)
   round2/               N-BaIoT, Edge-IIoTset, CIC-IoT-2023 (8 classes)
   round3/               UNSW-NB15, CIC-IoT-2023 (34 classes, incomplete)
 legacy/                 the earlier version of the study (see legacy/README.md)
@@ -60,7 +61,8 @@ LightGBM runs with default settings that diverged; they were repeated with `max_
 |---|---|---|
 | `original` | Baseline | ExtraTrees, 300 trees, default settings |
 | `split10` | ExtraTrees, split 10 | Baseline with `min_samples_split=10` |
-| `lgbm` | LightGBM | LightGBM defaults, `max_delta_step=1` |
+| `split_grid` | ExtraTrees, CV grid | Baseline with `min_samples_split` chosen from {2, 5, 10, 20} by 3-fold CV Macro-F1 on the training split |
+| `lgbm` | LightGBM | LightGBM with default settings except `max_delta_step=1` |
 | `bigfeat` | BigFeat (scaled) | BigFeat features + min-max scaled originals → ExtraTrees |
 | `bigfeat_raw` | BigFeat (unscaled) | BigFeat features + unscaled originals → ExtraTrees |
 | `tpot` | TPOT (ExtraTrees) | TPOT search over ExtraTrees hyperparameters |
@@ -116,7 +118,7 @@ python experiments/paper_figures.py       # results/figures/
 The run scripts are resumable: finished runs are skipped. Each run is single-threaded so that training
 times are comparable; the number of runs in parallel is set by the `W_*` variables in the scripts. Per-run
 training times are listed in `results/paper_tables.md`; explaining a run adds a few minutes, and TPOT with
-its full search space takes 1--3 hours per run.
+its full search space takes 1--5 hours per run.
 
 To run a single cell, for example LightGBM on UNSW-NB15 with seed 0:
 

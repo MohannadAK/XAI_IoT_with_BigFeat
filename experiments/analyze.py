@@ -25,11 +25,12 @@ from scipy import stats
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.environ.get("REVISION_OUT", os.path.join(REPO, "results", "round3"))
 OUT = os.path.join(RES, "summary")
-CONFIGS = ["original", "split10", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
+CONFIGS = ["original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
 # Figure legend labels: "features + model". BigFeat returns its generated features plus min-max scaled
 # originals; the "_raw" variants swap in the unscaled originals.
 LABEL = dict(original="Baseline: ExtraTrees (default)",
              split10="ExtraTrees, min_samples_split=10",
+             split_grid="ExtraTrees, min_samples_split by CV grid {2, 5, 10, 20}",
              lgbm="LightGBM (default)",
              bigfeat="BigFeat + scaled originals \u2192 ExtraTrees",
              bigfeat_raw="BigFeat + unscaled originals \u2192 ExtraTrees",
@@ -278,7 +279,7 @@ def pareto(summary, rope=ROPE_F1):
     all three and strictly better on at least one, where F1 differences inside the ROPE count as
     ties (neither better nor worse)."""
     rows = []
-    stab_col = "seed_stability_tau_common"
+    stab_col = "seed_stability_tau"
     for key, sub in summary.groupby(["dataset", "feature_mode", "unit"]):
         sub = sub.reset_index(drop=True)
         f1 = sub["f1_macro__mean"].values
@@ -298,7 +299,7 @@ def pareto(summary, rope=ROPE_F1):
                     dom_by.append(sub.loc[j, "config"])
             rows.append(dict(dataset=key[0], feature_mode=key[1], unit=key[2], config=sub.loc[i, "config"],
                              f1=f1[i], f1_gap_to_best=best - f1[i], within_rope_of_best=bool(f1[i] >= best - rope),
-                             train_time_s=t[i], stability_common_seeds=st[i],
+                             train_time_s=t[i], stability_all_seeds=st[i],
                              pareto_optimal=not dom_by, dominated_by=",".join(dom_by)))
     return pd.DataFrame(rows)
 
@@ -310,10 +311,10 @@ def figures(summary, df, par):
     import matplotlib.pyplot as plt
     from matplotlib.lines import Line2D
     os.makedirs(os.path.join(OUT, "figures"), exist_ok=True)
-    colors = dict(original="#4C72B0", split10="#DD8452", lgbm="#937860", bigfeat="#55A868", bigfeat_raw="#64B5CD",
+    colors = dict(original="#4C72B0", split10="#DD8452", split_grid="#A0522D", lgbm="#937860", bigfeat="#55A868", bigfeat_raw="#64B5CD",
                   tpot="#C44E52", both="#8172B2", both_raw="#B5559A",
                   bigfeat_auto="#555555", tpot_auto="#A68A00")
-    markers = dict(original="o", split10="v", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*", bigfeat_auto="p", tpot_auto="h")
+    markers = dict(original="o", split10="v", split_grid="<", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*", bigfeat_auto="p", tpot_auto="h")
     for (ds, fm), sub in summary.groupby(["dataset", "feature_mode"]):
         pf = par[(par.dataset == ds) & (par.feature_mode == fm)].set_index(["unit", "config"])
         fig, ax = plt.subplots(figsize=(9.6, 4.2))
@@ -323,21 +324,21 @@ def figures(summary, df, par):
                 for c in [c for c in CONFIGS if c != "original"]:
                     if c in su.index:
                         ax.plot([su.loc["original", "train_time_s__mean"], su.loc[c, "train_time_s__mean"]],
-                                [su.loc["original", "seed_stability_tau_common"],
-                                 su.loc[c, "seed_stability_tau_common"]], color="#bbbbbb", lw=0.6, zorder=0)
+                                [su.loc["original", "seed_stability_tau"],
+                                 su.loc[c, "seed_stability_tau"]], color="#bbbbbb", lw=0.6, zorder=0)
         handles = []
         for c in CONFIGS:
             s_ = sub[sub.config == c]
             if s_.empty:
                 continue
             opt = np.array([bool(pf.loc[(u, c), "pareto_optimal"]) for u in s_.unit])
-            x, y = s_["train_time_s__mean"].values, s_["seed_stability_tau_common"].values
+            x, y = s_["train_time_s__mean"].values, s_["seed_stability_tau"].values
             ax.scatter(x[opt], y[opt], c=colors[c], marker=markers[c], s=40, edgecolors="none")
             ax.scatter(x[~opt], y[~opt], facecolors="none", edgecolors=colors[c], marker=markers[c], s=40)
             handles.append(Line2D([], [], ls="none", marker=markers[c], color=colors[c], label=LABEL[c]))
         if sub.unit.nunique() == 1:        # single-task dataset: show the F1 each point buys
             for _, r in sub.iterrows():
-                ax.annotate(f"F1 {r['f1_macro__mean']:.3f}", (r["train_time_s__mean"], r["seed_stability_tau_common"]),
+                ax.annotate(f"F1 {r['f1_macro__mean']:.3f}", (r["train_time_s__mean"], r["seed_stability_tau"]),
                             textcoords="offset points", xytext=(6, 4), fontsize=7)
         ax.set_xscale("log")
         ax.set_xlabel("Training time incl. feature generation / search (s, log scale)")
@@ -387,11 +388,7 @@ def main():
         print("no runs found")
         return
     df.to_csv(os.path.join(OUT, "all_runs.csv"), index=False)
-    stab = cross_seed_stability(attrs)
-    common = cross_seed_stability(attrs, seeds={0, 1, 2}).rename(
-        columns={"seed_stability_tau": "seed_stability_tau_common", "seed_stability_top5": "seed_stability_top5_common",
-                 "n_seeds": "n_seeds_common"})
-    stab = stab.merge(common, on=["dataset", "feature_mode", "unit", "config"], how="outer")
+    stab = cross_seed_stability(attrs)          # every configuration has the same 5 seeds
     summary = summarize(df, stab)
     summary.to_csv(os.path.join(OUT, "summary_by_unit_config.csv"), index=False)
 

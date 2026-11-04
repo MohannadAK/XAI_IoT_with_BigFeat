@@ -170,12 +170,12 @@
  "n_features_original": 42,
  "n_features_generated": 12,
  "n_features_model": 54,
- "time_prep_s": 1.0160001693293452e-05,
- "time_featgen_s": 114.77762753501884,
- "time_fit_s": 39.7721746530151,
- "train_time_s": 154.54981234803563,
- "train_cpu_s": 154.482828993,
- "infer_ms_per_1k": 48.301439308640546,
+ "time_prep_s": 7.1829999797046185e-06,
+ "time_featgen_s": 114.05318233400067,
+ "time_fit_s": 39.81769384299878,
+ "train_time_s": 153.87088335999943,
+ "train_cpu_s": 153.58497289199997,
+ "infer_ms_per_1k": 48.29650645292353,
  "model_size_mb": 3.500326,
  "n_tree_nodes": 61000,
  "formulas": [
@@ -423,9 +423,11 @@
    0.6189947313270573
   ]
  },
- "xai_faithfulness_corr": 0.40244283224070243,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.471148953607671,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.40244283224070243,
  "xai_bootstrap_tau_mean": 0.9753501400560222,
  "xai_generated_share": 0.405885685542657,
- "time_xai_s": 32.550183647021186
+ "time_xai_s": 32.46934743199927
 }

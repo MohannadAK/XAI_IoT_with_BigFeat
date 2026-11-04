@@ -17,7 +17,9 @@ Configurations
     tpot     : TPOT restricted to ExtraTrees hyperparameters, original features
     both     : BigFeat features + TPOT
     split10  : ExtraTrees(300) with min_samples_split=10 (the single setting TPOT kept choosing)
-    lgbm     : LightGBM with default settings (second tree-model family)
+    split_grid : ExtraTrees(300) with min_samples_split chosen from {2, 5, 10, 20} by 3-fold CV Macro-F1 on
+               the training split (a manual grid, independent of TPOT)
+    lgbm     : LightGBM with default settings except max_delta_step=1 (second tree-model family)
     bigfeat_raw : BigFeat's generated features + the *unscaled* original features + ExtraTrees(300).
                BigFeat min-max scales internally and returns scaled originals; this variant keeps its
                generated features but hands the model the original columns unscaled.
@@ -60,8 +62,10 @@ BIGFEAT_PATH = os.environ.get("BIGFEAT_PATH", "/mnt/Projects/BigFeat")
 if BIGFEAT_PATH not in sys.path:
     sys.path.insert(0, BIGFEAT_PATH)
 
-CONFIGS = ("original", "split10", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw",
+CONFIGS = ("original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw",
            "bigfeat_auto", "tpot_auto")
+# split_grid: a small manual grid that a practitioner would try, chosen without TPOT's help.
+SPLIT_GRID = (2, 5, 10, 20)
 BIGFEAT_CONFIGS = ("bigfeat", "bigfeat_raw", "both", "both_raw", "bigfeat_auto")
 # Configurations whose model needs scaled inputs. All current models are tree-based, so none do.
 # A non-tree model (e.g. logistic regression, k-NN, a neural net) must be added here.
@@ -223,6 +227,26 @@ def bigfeat_select_model(X, y, seed):
 TREE_SHAP_MODELS = ("ExtraTreesClassifier", "RandomForestClassifier", "DecisionTreeClassifier",
                     "LGBMClassifier", "XGBClassifier", "GradientBoostingClassifier")
 LINEAR_SHAP_MODELS = ("LogisticRegression", "SGDClassifier", "LinearDiscriminantAnalysis")
+# Models whose SHAP values explain the raw margin (log-odds) rather than the class probability.
+MARGIN_SHAP_MODELS = ("LGBMClassifier", "XGBClassifier", "GradientBoostingClassifier") + LINEAR_SHAP_MODELS
+
+
+def shap_output_space(model):
+    """'margin' if the SHAP values of ``model`` explain raw margins, 'probability' otherwise
+    (TreeSHAP on scikit-learn forests, and permutation SHAP on predict_proba)."""
+    return "margin" if type(model).__name__ in MARGIN_SHAP_MODELS else "probability"
+
+
+def model_output(model, X, space):
+    """Per-class model output in the space its SHAP values explain."""
+    if space == "probability":
+        return model.predict_proba(X)
+    if type(model).__name__ == "LGBMClassifier":
+        out = model.predict(X, raw_score=True)
+    else:
+        out = model.decision_function(X)
+    out = np.asarray(out)
+    return np.stack([-out, out], axis=1) if out.ndim == 1 else out
 
 
 def shap_values(model, Xs, X_background, seed):
@@ -337,9 +361,10 @@ def deletion_insertion(model, X, y, order, baseline, n_random=N_RANDOM_ORDERS, r
                 deletion_curve=dele, insertion_curve=ins)
 
 
-def faithfulness_correlation(model, X, local_attr, pred_cls, baseline, n_subsets, rng):
-    """Bhatt et al. (2020): corr(sum of attributions of a random subset, drop in predicted-class
-    probability when that subset is set to baseline). Averaged over instances."""
+def faithfulness_correlation(model, X, local_attr, pred_cls, baseline, n_subsets, rng, space="probability"):
+    """Bhatt et al. (2020): corr(sum of attributions of a random subset, drop in the predicted class's
+    output when that subset is set to baseline). Averaged over instances. ``space`` must be the output
+    the attributions explain: the probability, or the raw margin for boosting and linear models."""
     n, d = X.shape
     size = max(1, d // 4)
     rows, masks = [], []
@@ -350,8 +375,8 @@ def faithfulness_correlation(model, X, local_attr, pred_cls, baseline, n_subsets
             x[s] = baseline[s]
             rows.append(x)
             masks.append(s)
-    P = model.predict_proba(np.vstack(rows))
-    p0 = model.predict_proba(X)
+    P = model_output(model, np.vstack(rows), space)
+    p0 = model_output(model, X, space)
     corrs = []
     for i in range(n):
         c = pred_cls[i]
@@ -465,6 +490,14 @@ def run_one(task: Task, seed: int, config: str, out_dir: str, load_fn):
     elif config == "lgbm":
         from lightgbm import LGBMClassifier
         model = LGBMClassifier(random_state=seed, **LGBM_PARAMS).fit(X_tr_m, y_tr)
+    elif config == "split_grid":
+        from sklearn.model_selection import GridSearchCV, StratifiedKFold
+        gs = GridSearchCV(ExtraTreesClassifier(random_state=seed, **ET_PARAMS),
+                          {"min_samples_split": list(SPLIT_GRID)}, scoring="f1_macro", n_jobs=1, refit=True,
+                          cv=StratifiedKFold(3, shuffle=True, random_state=seed)).fit(X_tr_m, y_tr)
+        model = gs.best_estimator_
+        res["split_grid_choice"] = int(gs.best_params_["min_samples_split"])
+        res["split_grid_cv"] = {str(v): float(m) for v, m in zip(SPLIT_GRID, gs.cv_results_["mean_test_score"])}
     elif config == "split10":
         model = ExtraTreesClassifier(random_state=seed, min_samples_split=10, **ET_PARAMS).fit(X_tr_m, y_tr)
     else:
@@ -550,10 +583,17 @@ def run_one(task: Task, seed: int, config: str, out_dir: str, load_fn):
     order = np.argsort(-shap_global)
     di = deletion_insertion(model, Xe, ye, order, baseline, rng=np.random.default_rng(seed))
     res["xai_deletion_insertion_shap"] = di
+    # Faithfulness is measured in the output space the SHAP values explain (margin for boosting).
+    space = shap_output_space(model)
     fc, fc_n = faithfulness_correlation(model, Xs[:100], local_pred[:100], pred_cls[:100], baseline,
-                                        N_FAITH_SUBSETS, np.random.default_rng(seed))
+                                        N_FAITH_SUBSETS, np.random.default_rng(seed), space=space)
+    res["shap_output_space"] = space
     res["xai_faithfulness_corr"] = fc
     res["xai_faithfulness_n"] = fc_n
+    if space != "probability":      # the earlier, mismatched measure, kept for comparison
+        res["xai_faithfulness_corr_proba"] = faithfulness_correlation(
+            model, Xs[:100], local_pred[:100], pred_cls[:100], baseline, N_FAITH_SUBSETS,
+            np.random.default_rng(seed))[0]
 
     # bootstrap stability of the global SHAP ranking over explained instances
     taus = []

@@ -211,18 +211,19 @@
  "n_features_original": 20,
  "n_features_generated": 0,
  "n_features_model": 20,
- "time_prep_s": 10.193154707027134,
- "time_featgen_s": 3.035005647689104e-06,
- "time_fit_s": 11.574431988003198,
- "train_time_s": 21.76758973003598,
- "train_cpu_s": 21.765768100999935,
- "infer_ms_per_1k": 38.38355968697191,
+ "time_prep_s": 9.770072560000699,
+ "time_featgen_s": 3.7369991332525387e-06,
+ "time_fit_s": 11.557005218000086,
+ "train_time_s": 21.327081514999918,
+ "train_cpu_s": 21.325017745999958,
+ "infer_ms_per_1k": 37.21270172365001,
  "model_size_mb": 3.563186,
  "n_tree_nodes": 59910,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.7017559622653984,
   "spearman": 0.8314049439890007,
@@ -230,18 +231,18 @@
   "top10_jaccard": 0.5384615384615384
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.7380628984749628,
-  "spearman": 0.8966101574464179,
+  "kendall_tau": 0.7273663347289488,
+  "spearman": 0.8845345997703719,
   "top5_jaccard": 0.6666666666666666,
-  "top10_jaccard": 0.8181818181818182
+  "top10_jaccard": 0.6666666666666666
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.6124070907670255,
-  "spearman": 0.7391661754830575,
+  "kendall_tau": 0.5863472145641734,
+  "spearman": 0.7230419994392251,
   "top5_jaccard": 0.6666666666666666,
-  "top10_jaccard": 0.5384615384615384
+  "top10_jaccard": 0.42857142857142855
  },
- "xai_local_shap_lime_spearman": 0.3289761441881584,
+ "xai_local_shap_lime_spearman": 0.32417330671998795,
  "xai_complexity_shap": {
   "effective_n_features": 10.586653489325391,
   "normalized_entropy": 0.7876518618934079,
@@ -303,9 +304,11 @@
    0.9986363551135831
   ]
  },
- "xai_faithfulness_corr": 0.6408429268145366,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.8000045478763618,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.6408429268145366,
  "xai_bootstrap_tau_mean": 0.9893478260869566,
  "xai_generated_share": 0.0,
- "time_xai_s": 19.64176965295337
+ "time_xai_s": 19.551225911000074
 }

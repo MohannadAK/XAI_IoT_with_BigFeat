@@ -211,18 +211,19 @@
  "n_features_original": 20,
  "n_features_generated": 0,
  "n_features_model": 20,
- "time_prep_s": 10.310169807984494,
- "time_featgen_s": 2.974993549287319e-06,
- "time_fit_s": 11.484883903991431,
- "train_time_s": 21.795056686969474,
- "train_cpu_s": 21.79327539000002,
- "infer_ms_per_1k": 35.254925681687325,
+ "time_prep_s": 11.71175377399959,
+ "time_featgen_s": 3.526999535097275e-06,
+ "time_fit_s": 9.550536079000267,
+ "train_time_s": 21.26229337999939,
+ "train_cpu_s": 21.260459636000007,
+ "infer_ms_per_1k": 36.7539895303046,
  "model_size_mb": 3.617891,
  "n_tree_nodes": 61264,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.722673545448798,
   "spearman": 0.8608927550416297,
@@ -230,18 +231,18 @@
   "top10_jaccard": 0.8181818181818182
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.5782676459104236,
+  "kendall_tau": 0.6100988924743,
   "spearman": 0.7996997020841146,
   "top5_jaccard": 0.6666666666666666,
-  "top10_jaccard": 0.8181818181818182
+  "top10_jaccard": 0.6666666666666666
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.5482524621471879,
-  "spearman": 0.6876777637108664,
+  "kendall_tau": 0.5603019668097635,
+  "spearman": 0.6908912112048425,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.6666666666666666
  },
- "xai_local_shap_lime_spearman": 0.3751017689558534,
+ "xai_local_shap_lime_spearman": 0.3661854443358548,
  "xai_complexity_shap": {
   "effective_n_features": 11.438650800916333,
   "normalized_entropy": 0.8134899315026457,
@@ -303,9 +304,11 @@
    0.9964477427334569
   ]
  },
- "xai_faithfulness_corr": 0.5986865945792994,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.7585699516489655,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.5986865945792994,
  "xai_bootstrap_tau_mean": 0.9955080213903743,
  "xai_generated_share": 0.0,
- "time_xai_s": 18.76947395398747
+ "time_xai_s": 19.09029321700018
 }

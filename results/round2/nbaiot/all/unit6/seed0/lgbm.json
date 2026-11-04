@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.0909660533070564e-06,
- "time_featgen_s": 1.6830163076519966e-06,
- "time_fit_s": 33.57490939099807,
- "train_time_s": 33.574917164980434,
- "train_cpu_s": 33.57242695000002,
- "infer_ms_per_1k": 40.7794542279038,
+ "time_prep_s": 6.45199997961754e-06,
+ "time_featgen_s": 2.2340000214171596e-06,
+ "time_fit_s": 33.577748278999934,
+ "train_time_s": 33.577756964999935,
+ "train_cpu_s": 33.574696063000005,
+ "infer_ms_per_1k": 41.01424343939057,
  "model_size_mb": 3.637109,
  "n_tree_nodes": 60670,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.4182363644792541,
   "spearman": 0.5058357732648475,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.5384615384615384
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.28160939985835687,
-  "spearman": 0.4012078993872204,
+  "kendall_tau": 0.3069991423414633,
+  "spearman": 0.4321658972832044,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.6666666666666666
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.37242348112330464,
-  "spearman": 0.46134925697271323,
+  "kendall_tau": 0.3477778095783801,
+  "spearman": 0.43129359169188497,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.42857142857142855
  },
- "xai_local_shap_lime_spearman": 0.1352181439479067,
+ "xai_local_shap_lime_spearman": 0.14093214834721182,
  "xai_complexity_shap": {
   "effective_n_features": 18.79530594360828,
   "normalized_entropy": 0.6182611416659013,
@@ -281,9 +282,11 @@
    1.0
   ]
  },
- "xai_faithfulness_corr": 0.5508449343375172,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.6889349630645909,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.5508449343375172,
  "xai_bootstrap_tau_mean": 0.9852003142183817,
  "xai_generated_share": 0.0,
- "time_xai_s": 45.2184365640278
+ "time_xai_s": 45.25083683400044
 }

@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.89295120537281e-06,
- "time_featgen_s": 1.653039362281561e-06,
- "time_fit_s": 33.709436499048024,
- "train_time_s": 33.70944504503859,
- "train_cpu_s": 33.706466176999925,
- "infer_ms_per_1k": 42.25536527210903,
+ "time_prep_s": 6.573000064236112e-06,
+ "time_featgen_s": 1.953000719367992e-06,
+ "time_fit_s": 33.74172589800037,
+ "train_time_s": 33.74173442400115,
+ "train_cpu_s": 33.738369990000024,
+ "infer_ms_per_1k": 42.46475649999797,
  "model_size_mb": 3.661054,
  "n_tree_nodes": 61064,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.39658877524692054,
   "spearman": 0.484461990344407,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.6666666666666666
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.3472511731073637,
-  "spearman": 0.4807667102336337,
+  "kendall_tau": 0.35034748316627906,
+  "spearman": 0.4839155175841581,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.5384615384615384
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.3721360561408246,
-  "spearman": 0.46476711666603204,
+  "kendall_tau": 0.3766151260241645,
+  "spearman": 0.4696592321509834,
   "top5_jaccard": 0.25,
   "top10_jaccard": 0.42857142857142855
  },
- "xai_local_shap_lime_spearman": 0.14907952523301526,
+ "xai_local_shap_lime_spearman": 0.14195228902631016,
  "xai_complexity_shap": {
   "effective_n_features": 24.04184390046669,
   "normalized_entropy": 0.6701456885059802,
@@ -281,9 +282,11 @@
    0.9957573290906624
   ]
  },
- "xai_faithfulness_corr": 0.6141193043213928,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.7377836740872885,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.6141193043213928,
  "xai_bootstrap_tau_mean": 0.9836794972505891,
  "xai_generated_share": 0.0,
- "time_xai_s": 45.3920048570144
+ "time_xai_s": 45.625348517999555
 }

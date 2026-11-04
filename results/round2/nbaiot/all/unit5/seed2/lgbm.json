@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 6.312038749456406e-06,
- "time_featgen_s": 1.7740530893206596e-06,
- "time_fit_s": 33.68082003999734,
- "train_time_s": 33.68082812608918,
- "train_cpu_s": 33.677670590999924,
- "infer_ms_per_1k": 39.44131160581795,
+ "time_prep_s": 6.432000191125553e-06,
+ "time_featgen_s": 1.7929996829479933e-06,
+ "time_fit_s": 33.39984519400059,
+ "train_time_s": 33.399853419000465,
+ "train_cpu_s": 33.39697925600001,
+ "infer_ms_per_1k": 41.09690806061543,
  "model_size_mb": 3.598803,
  "n_tree_nodes": 60224,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.4254534003490358,
   "spearman": 0.5196168601533852,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.42857142857142855
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.37453868330380796,
-  "spearman": 0.5555371319676579,
+  "kendall_tau": 0.3785329432570069,
+  "spearman": 0.5586410002199083,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.3333333333333333
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.3919254403364535,
-  "spearman": 0.49087742614200647,
+  "kendall_tau": 0.3823740486142003,
+  "spearman": 0.479082030047968,
   "top5_jaccard": 0.25,
-  "top10_jaccard": 0.3333333333333333
+  "top10_jaccard": 0.25
  },
- "xai_local_shap_lime_spearman": 0.15070051266699935,
+ "xai_local_shap_lime_spearman": 0.15135048267510684,
  "xai_complexity_shap": {
   "effective_n_features": 22.933727156203563,
   "normalized_entropy": 0.6602009352056217,
@@ -281,9 +282,11 @@
    0.990478211527638
   ]
  },
- "xai_faithfulness_corr": 0.5190137170321126,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.702481871812,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.5190137170321126,
  "xai_bootstrap_tau_mean": 0.9796039603960396,
  "xai_generated_share": 0.0,
- "time_xai_s": 43.99808792100521
+ "time_xai_s": 44.853100100999654
 }

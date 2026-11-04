@@ -4,7 +4,11 @@ Upper bound on accuracy / Macro-F1 imposed by label collisions: identical featur
 majority label of each distinct vector, i.e. of a classifier that memorises the data perfectly.
 
   python experiments/ceiling.py            -> results/ceiling.csv
+
+For N-BaIoT the bound is computed on the raw 115 features and, for the main setting, on the 20
+features each run selected inside its training split (infold20_seed<k>).
 """
+import json
 import os
 import sys
 
@@ -35,6 +39,14 @@ def main():
         rows.append(dict(dataset="nbaiot", feature_mode="prebuilt20", unit=d, **bound(X.values, y.values)))
         X, y = datasets.nbaiot_raw(d, 0)
         rows.append(dict(dataset="nbaiot", feature_mode="raw115_seed0", unit=d, **bound(X.values, y.values)))
+        # Main setting: the 20 features each run selected on its training split (recorded per run).
+        for seed in range(5):
+            run = os.path.join(datasets.REPO, "results", "round2", "nbaiot", "infold20", f"unit{d}", f"seed{seed}",
+                               "original.json")
+            cols = json.load(open(run))["selected_features"]
+            X, y = datasets.nbaiot_raw(d, seed)
+            rows.append(dict(dataset="nbaiot", feature_mode=f"infold20_seed{seed}", unit=d,
+                             **bound(X[cols].values, y.values)))
     X, y = datasets.edgeiiot(0)
     rows.append(dict(dataset="edgeiiot", feature_mode="all_seed0", unit="all", **bound(X.values, y.values)))
     X, y = datasets.ciciot(0)

@@ -44,6 +44,10 @@ if [ -n "$BIGFEAT_CONFIGS" ]; then
 else
   echo "== phase 7 skipped: BIGFEAT_CONFIGS not set (waiting for the BigFeat decision)"
 fi
+echo "== phase 8: ExtraTrees with min_samples_split chosen by a CV grid; model chosen by BigFeat / TPOT (Edge-IIoTset)"; date
+$PY --dataset edgeiiot --units all --seeds $SEEDS --configs split_grid bigfeat_auto --workers 2
+$PY --dataset nbaiot --feature-mode infold20 --units 1-9 --seeds $SEEDS --configs split_grid --workers 2
+$PY --dataset edgeiiot --units all --seeds $SEEDS --configs tpot_auto --workers 2
 echo "== analysis"; date
 python3 -W ignore experiments/analyze.py > "$REVISION_OUT/logs/analyze.log" 2>&1
 echo "== done"; date

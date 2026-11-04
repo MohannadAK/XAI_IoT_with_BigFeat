@@ -84,18 +84,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 9.07795038074255e-06,
- "time_featgen_s": 2.103974111378193e-06,
- "time_fit_s": 12.421341881970875,
- "train_time_s": 12.421353063895367,
- "train_cpu_s": 12.420246544000008,
- "infer_ms_per_1k": 21.6219333055455,
+ "time_prep_s": 8.766000064497348e-06,
+ "time_featgen_s": 1.8240007193526253e-06,
+ "time_fit_s": 12.330163231999904,
+ "train_time_s": 12.330173822000688,
+ "train_cpu_s": 12.32926891400001,
+ "infer_ms_per_1k": 20.42894325000412,
  "model_size_mb": 1.997613,
  "n_tree_nodes": 33584,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.33496315051108566,
   "spearman": 0.4054710581763341,
@@ -103,18 +104,18 @@
   "top10_jaccard": 0.42857142857142855
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.35274792322177584,
-  "spearman": 0.4863784413110754,
+  "kendall_tau": 0.37245623145939577,
+  "spearman": 0.5136777706165822,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.6666666666666666
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.3247933414404192,
-  "spearman": 0.400747173198876,
+  "kendall_tau": 0.3256795442820029,
+  "spearman": 0.40184205880464124,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.5384615384615384
  },
- "xai_local_shap_lime_spearman": 0.16300442933845263,
+ "xai_local_shap_lime_spearman": 0.1795682153956728,
  "xai_complexity_shap": {
   "effective_n_features": 17.224826064078062,
   "normalized_entropy": 0.5998719564307284,
@@ -176,9 +177,11 @@
    0.9945032659966612
   ]
  },
- "xai_faithfulness_corr": 0.452954589953908,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.5766401767323923,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.452954589953908,
  "xai_bootstrap_tau_mean": 0.9845780885780886,
  "xai_generated_share": 0.0,
- "time_xai_s": 23.40756619401509
+ "time_xai_s": 23.732748248999997
 }

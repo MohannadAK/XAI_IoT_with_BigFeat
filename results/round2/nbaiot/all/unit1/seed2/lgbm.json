@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 7.333990652114153e-06,
- "time_featgen_s": 1.8840073607861996e-06,
- "time_fit_s": 34.68943163199583,
- "train_time_s": 34.689440849993844,
- "train_cpu_s": 34.68595535099996,
- "infer_ms_per_1k": 46.46915001494838,
+ "time_prep_s": 7.042999641271308e-06,
+ "time_featgen_s": 2.113999471475836e-06,
+ "time_fit_s": 34.25997576100053,
+ "train_time_s": 34.259984917999645,
+ "train_cpu_s": 34.25658475799992,
+ "infer_ms_per_1k": 44.901406151507906,
  "model_size_mb": 3.662893,
  "n_tree_nodes": 61104,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.39256867356249575,
   "spearman": 0.4754180907513528,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.42857142857142855
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.36569005373149105,
-  "spearman": 0.5197993856724545,
+  "kendall_tau": 0.3601702038638459,
+  "spearman": 0.5166491820653141,
   "top5_jaccard": 0.6666666666666666,
   "top10_jaccard": 0.42857142857142855
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.3527770725762761,
-  "spearman": 0.43514612687594645,
+  "kendall_tau": 0.34350285226587857,
+  "spearman": 0.4239274735098549,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.42857142857142855
  },
- "xai_local_shap_lime_spearman": 0.14821015931571085,
+ "xai_local_shap_lime_spearman": 0.1398155810246863,
  "xai_complexity_shap": {
   "effective_n_features": 25.217185818619665,
   "normalized_entropy": 0.6802048273174061,
@@ -281,9 +282,11 @@
    1.0
   ]
  },
- "xai_faithfulness_corr": 0.6468359354600159,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.7752312215685148,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.6468359354600159,
  "xai_bootstrap_tau_mean": 0.9878625366004008,
  "xai_generated_share": 0.0,
- "time_xai_s": 49.594959745998494
+ "time_xai_s": 49.56147206300011
 }

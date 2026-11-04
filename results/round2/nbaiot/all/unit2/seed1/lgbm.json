@@ -189,18 +189,19 @@
  "n_features_original": 115,
  "n_features_generated": 0,
  "n_features_model": 115,
- "time_prep_s": 7.504015229642391e-06,
- "time_featgen_s": 1.9039725884795189e-06,
- "time_fit_s": 32.68227121303789,
- "train_time_s": 32.68228062102571,
- "train_cpu_s": 32.680530560999955,
- "infer_ms_per_1k": 43.93161630814596,
+ "time_prep_s": 6.883000423840713e-06,
+ "time_featgen_s": 1.75300010596402e-06,
+ "time_fit_s": 34.29827111099985,
+ "train_time_s": 34.29827974700038,
+ "train_cpu_s": 34.29156613299995,
+ "infer_ms_per_1k": 44.77996691900964,
  "model_size_mb": 3.629736,
  "n_tree_nodes": 60632,
  "formula_mean_depth": 0.0,
  "formula_max_depth": 0,
  "formula_mean_ops": 0.0,
  "formula_total_ops": 0,
+ "shap_method": "tree",
  "xai_shap_vs_pfi": {
   "kendall_tau": 0.43516094827490265,
   "spearman": 0.5214467478442583,
@@ -208,18 +209,18 @@
   "top10_jaccard": 0.6666666666666666
  },
  "xai_shap_vs_lime": {
-  "kendall_tau": 0.3712244621945446,
-  "spearman": 0.5254627053949216,
+  "kendall_tau": 0.3964757321239951,
+  "spearman": 0.554610961779296,
   "top5_jaccard": 0.6666666666666666,
-  "top10_jaccard": 0.42857142857142855
+  "top10_jaccard": 0.5384615384615384
  },
  "xai_pfi_vs_lime": {
-  "kendall_tau": 0.3566624256430711,
-  "spearman": 0.44062251589786555,
+  "kendall_tau": 0.37116625810914794,
+  "spearman": 0.4576520641026512,
   "top5_jaccard": 0.42857142857142855,
   "top10_jaccard": 0.42857142857142855
  },
- "xai_local_shap_lime_spearman": 0.152851619353456,
+ "xai_local_shap_lime_spearman": 0.1540402974260973,
  "xai_complexity_shap": {
   "effective_n_features": 20.432096541672394,
   "normalized_entropy": 0.6358588368982387,
@@ -281,9 +282,11 @@
    0.9962787421958276
   ]
  },
- "xai_faithfulness_corr": 0.659116968616948,
+ "shap_output_space": "margin",
+ "xai_faithfulness_corr": 0.7970574506605277,
  "xai_faithfulness_n": 100,
+ "xai_faithfulness_corr_proba": 0.659116968616948,
  "xai_bootstrap_tau_mean": 0.9792447552447554,
  "xai_generated_share": 0.0,
- "time_xai_s": 47.94213944801595
+ "time_xai_s": 48.63945642100043
 }

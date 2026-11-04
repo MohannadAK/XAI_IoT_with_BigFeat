@@ -35,6 +35,8 @@ $PY --dataset unswnb15 --units all --seeds $SEEDS --configs $BIGFEAT_CONFIGS --w
 $PY --dataset ciciot34 --units all --seeds $SEEDS --configs $BIGFEAT_CONFIGS --workers $W_CIC
 echo "== phase 5: model chosen by BigFeat / TPOT (UNSW-NB15)"; date
 $PY --dataset unswnb15 --units all --seeds $SEEDS --configs bigfeat_auto tpot_auto --workers $W_UNSW
+echo "== phase 6: ExtraTrees with min_samples_split chosen by a CV grid (UNSW-NB15)"; date
+$PY --dataset unswnb15 --units all --seeds $SEEDS --configs split_grid --workers $W_UNSW
 echo "== analysis"; date
 python3 -W ignore experiments/analyze.py > "$REVISION_OUT/logs/analyze.log" 2>&1
 echo "== done"; date
