@@ -119,14 +119,18 @@ def fig_f1(runs):
     plt.close(fig)
 
 
-# Label offsets (points) where points would otherwise collide.
-OFFSET = {("edgeiiot", "original"): (5, 4), ("edgeiiot", "split10"): (5, -9), ("edgeiiot", "lgbm"): (5, 2),
-          ("edgeiiot", "bigfeat"): (-30, 3), ("edgeiiot", "bigfeat_raw"): (-30, -10), ("edgeiiot", "tpot"): (-12, 6),
-          ("edgeiiot", "both"): (7, 1), ("edgeiiot", "both_raw"): (7, -8),
+# Label offsets (points) where points would otherwise collide. Labels placed further than LEADER points
+# from their marker get a thin leader line, so that each number can be traced to its own marker.
+OFFSET = {("edgeiiot", "lgbm"): (6, -2), ("edgeiiot", "original"): (-24, -15), ("edgeiiot", "split10"): (-28, -31),
+          ("edgeiiot", "split_grid"): (-8, 7), ("edgeiiot", "tpot"): (-8, 7),
+          ("edgeiiot", "bigfeat"): (-42, -3), ("edgeiiot", "bigfeat_raw"): (-36, -19),
+          ("edgeiiot", "both"): (12, 12), ("edgeiiot", "both_raw"): (12, -15),
+          ("edgeiiot", "bigfeat_auto"): (7, -3), ("edgeiiot", "tpot_auto"): (-34, -3),
           ("unswnb15", "original"): (5, 4), ("unswnb15", "split10"): (-6, 6), ("unswnb15", "lgbm"): (-14, -10),
           ("unswnb15", "bigfeat"): (5, 3), ("unswnb15", "bigfeat_raw"): (5, -8), ("unswnb15", "tpot"): (-12, 6),
           ("unswnb15", "both"): (5, 4), ("unswnb15", "both_raw"): (5, -8), ("unswnb15", "bigfeat_auto"): (5, -8),
           ("unswnb15", "tpot_auto"): (-30, 5)}
+LEADER = 12
 
 
 def fig_pareto(summ, par):
@@ -145,8 +149,11 @@ def fig_pareto(summ, par):
             opt = bool(p.loc[c, "pareto_optimal"])
             ax.plot(x, yv, MARK[c], ms=6.5 if MARK[c] in "*Ph" else 5.5, color=GROUP[c],
                     mfc=GROUP[c] if opt else "white", mew=1.1, zorder=3)
-            ax.annotate(f"{s.loc[c, 'f1_macro__mean']:.3f}", (x, yv), textcoords="offset points",
-                        xytext=OFFSET.get((ds, c), (5, 3)), fontsize=7, color="#333333")
+            off = OFFSET.get((ds, c), (5, 3))
+            lead = dict(arrowstyle="-", color="#777777", lw=0.5, shrinkA=0, shrinkB=3.5) \
+                if np.hypot(*off) > LEADER else None
+            ax.annotate(f"{s.loc[c, 'f1_macro__mean']:.3f}", (x, yv), textcoords="offset points", xytext=off,
+                        fontsize=7, color="#333333", va="center", arrowprops=lead)
             if c not in seen:
                 seen.append(c)
         ax.set_xscale("log")
