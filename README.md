@@ -28,7 +28,7 @@ results/
   ceiling.csv           upper bound on Macro-F1 per dataset
   paper_tables.md       the paper's tables, regenerated from the files below
   figures/              the paper's figures
-  review_logs/          script and log of the additional runs (LightGBM reruns, CV grid, model choice on Edge-IIoTset)
+  review_logs/          scripts and logs of the additional runs (LightGBM reruns, CV grid, model choice, LightGBM CV and FLAML)
   round2/               N-BaIoT, Edge-IIoTset, CIC-IoT-2023 (8 classes)
   round3/               UNSW-NB15, CIC-IoT-2023 (34 classes, incomplete)
 legacy/                 the earlier version of the study (see legacy/README.md)
@@ -71,6 +71,8 @@ LightGBM runs with default settings that diverged; they were repeated with `max_
 | `both_raw` | BigFeat (unscaled) + TPOT | `bigfeat_raw` features → TPOT (ExtraTrees) |
 | `bigfeat_auto` | BigFeat + model selection | BigFeat features → LightGBM, random forest or logistic regression, chosen by 3-fold CV Macro-F1 (re-implementation of BigFeat's selector, which uses binary F1; decision tree omitted) |
 | `tpot_auto` | TPOT, full search | TPOT default search space (scaler → selector → transformer → 17 classifiers) |
+| `lgbm_cv` | LightGBM, CV | LightGBM with `max_delta_step` chosen from {0, 1} by 3-fold CV Macro-F1 (added 2026-11; separate Holm family) |
+| `flaml` | FLAML | FLAML 2.7 default search, Macro-F1, one thread, 300 s budget (added 2026-11; separate Holm family) |
 
 ## Installation
 

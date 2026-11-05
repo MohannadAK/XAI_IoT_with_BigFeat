@@ -39,13 +39,16 @@ plt.rcParams.update({"font.size": 8, "axes.titlesize": 9, "axes.labelsize": 8.5,
 NAME = dict(original="Baseline (ExtraTrees)", split10="ExtraTrees, split 10", split_grid="ExtraTrees, CV grid", lgbm="LightGBM",
             bigfeat="BigFeat (scaled)", bigfeat_raw="BigFeat (unscaled)", tpot="TPOT (ExtraTrees)",
             both="BigFeat (scaled) + TPOT", both_raw="BigFeat (unscaled) + TPOT",
-            bigfeat_auto="BigFeat + model selection", tpot_auto="TPOT, full search")
-ORDER = ["split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
+            bigfeat_auto="BigFeat + model selection", tpot_auto="TPOT, full search", lgbm_cv="LightGBM, CV",
+            flaml="FLAML (300 s)")
+ORDER = ["split10", "split_grid", "lgbm", "lgbm_cv", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto",
+         "tpot_auto", "flaml"]
 # One colour per kind of change: cheap manual choice, BigFeat, TPOT, both, tool picks the model.
 GROUP = dict(original="#4D4D4D", split10="#1F5FA8", split_grid="#1F5FA8", lgbm="#1F5FA8", bigfeat="#2E8B3E", bigfeat_raw="#2E8B3E",
-             tpot="#C0392B", both="#7B4FA0", both_raw="#7B4FA0", bigfeat_auto="#B8860B", tpot_auto="#B8860B")
+             tpot="#C0392B", both="#7B4FA0", both_raw="#7B4FA0", bigfeat_auto="#B8860B", tpot_auto="#B8860B",
+             lgbm_cv="#1F5FA8", flaml="#B8860B")
 MARK = dict(original="o", split10="v", split_grid="<", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*",
-            bigfeat_auto="p", tpot_auto="h")
+            bigfeat_auto="p", tpot_auto="h", lgbm_cv="d", flaml=">")
 DATASETS = [("nbaiot", "infold20", "N-BaIoT"), ("edgeiiot", "all", "Edge-IIoTset"), ("unswnb15", "all", "UNSW-NB15")]
 
 
@@ -121,12 +124,12 @@ def fig_f1(runs):
 
 # Label offsets (points) where points would otherwise collide. Labels placed further than LEADER points
 # from their marker get a thin leader line, so that each number can be traced to its own marker.
-OFFSET = {("edgeiiot", "lgbm"): (6, -2), ("edgeiiot", "original"): (-24, -15), ("edgeiiot", "split10"): (-28, -31),
+OFFSET = {("edgeiiot", "lgbm"): (6, -2), ("edgeiiot", "original"): (-24, -15), ("edgeiiot", "split10"): (-4, -31),
           ("edgeiiot", "split_grid"): (-8, 7), ("edgeiiot", "tpot"): (-8, 7),
           ("edgeiiot", "bigfeat"): (-42, -3), ("edgeiiot", "bigfeat_raw"): (-36, -19),
-          ("edgeiiot", "both"): (12, 12), ("edgeiiot", "both_raw"): (12, -15),
+          ("edgeiiot", "both"): (-34, 13), ("edgeiiot", "both_raw"): (12, -15),
           ("edgeiiot", "bigfeat_auto"): (7, -3), ("edgeiiot", "tpot_auto"): (-34, -3),
-          ("unswnb15", "original"): (5, 4), ("unswnb15", "split10"): (-6, 6), ("unswnb15", "lgbm"): (-14, -10),
+          ("unswnb15", "original"): (5, 4), ("unswnb15", "split10"): (-6, 6), ("unswnb15", "lgbm"): (6, -10),
           ("unswnb15", "bigfeat"): (5, 3), ("unswnb15", "bigfeat_raw"): (5, -8), ("unswnb15", "tpot"): (-12, 6),
           ("unswnb15", "both"): (5, 4), ("unswnb15", "both_raw"): (5, -8), ("unswnb15", "bigfeat_auto"): (5, -8),
           ("unswnb15", "tpot_auto"): (-30, 5)}
@@ -134,7 +137,7 @@ LEADER = 12
 
 
 def fig_pareto(summ, par):
-    fig, axes = plt.subplots(1, 2, figsize=(WIDTH, 3.25), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(WIDTH, 3.7), sharey=True)
     seen = []
     for ax, (ds, title) in zip(axes, [("edgeiiot", "Edge-IIoTset"), ("unswnb15", "UNSW-NB15")]):
         s = summ[summ.dataset == ds].set_index("config")
@@ -161,11 +164,11 @@ def fig_pareto(summ, par):
         ax.grid(alpha=0.3)
         ax.set_xlim(3, 12000)
     axes[0].set_ylabel("Cross-seed stability of\nthe SHAP ranking (Kendall τ)")
-    fig.supxlabel("Training time, s (log scale)", fontsize=8.5, y=0.2)
+    fig.supxlabel("Training time, s (log scale)", fontsize=8.5, y=0.268)
     handles = [Line2D([], [], ls="none", marker=MARK[c], color=GROUP[c], ms=5.5, label=NAME[c]) for c in seen]
-    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, -0.01),
+    fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=7, frameon=False, bbox_to_anchor=(0.5, -0.01),
                columnspacing=1.0, handletextpad=0.3)
-    fig.tight_layout(rect=(0, 0.2, 1, 1), w_pad=0.8)
+    fig.tight_layout(rect=(0, 0.27, 1, 1), w_pad=0.8)
     fig.savefig(os.path.join(OUT, "pareto.pdf"))
     plt.close(fig)
 

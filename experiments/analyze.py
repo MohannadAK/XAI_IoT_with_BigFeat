@@ -25,7 +25,11 @@ from scipy import stats
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.environ.get("REVISION_OUT", os.path.join(REPO, "results", "round3"))
 OUT = os.path.join(RES, "summary")
-CONFIGS = ["original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
+CONFIGS = ["original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto",
+           "lgbm_cv", "flaml"]
+# Added after the main grid (2026-11-05); Holm-corrected as a separate family so that the corrected
+# p-values of the planned comparisons do not change.
+SUPPLEMENTARY = ("lgbm_cv", "flaml")
 # Figure legend labels: "features + model". BigFeat returns its generated features plus min-max scaled
 # originals; the "_raw" variants swap in the unscaled originals.
 LABEL = dict(original="Baseline: ExtraTrees (default)",
@@ -38,7 +42,9 @@ LABEL = dict(original="Baseline: ExtraTrees (default)",
              both="BigFeat + scaled originals \u2192 TPOT (ExtraTrees-only)",
              both_raw="BigFeat + unscaled originals \u2192 TPOT (ExtraTrees-only)",
              bigfeat_auto="BigFeat + scaled originals \u2192 BigFeat-selected model\n(LightGBM / RF / LogReg, 3-fold CV)",
-             tpot_auto="TPOT, full default search\n(scaler \u2192 selector \u2192 transformer \u2192 17 classifiers)")
+             tpot_auto="TPOT, full default search\n(scaler \u2192 selector \u2192 transformer \u2192 17 classifiers)",
+             lgbm_cv="LightGBM, max_delta_step from {0, 1} by 3-fold CV",
+             flaml="FLAML, 300 s budget")
 DATASET_LABEL = dict(nbaiot="N-BaIoT", edgeiiot="Edge-IIoTset", ciciot2023="CIC-IoT-2023 (8 classes)",
                      ciciot34="CIC-IoT-2023 (34 classes)", unswnb15="UNSW-NB15 (10 classes)")
 FEATURE_MODE_LABEL = dict(all="all features", infold20="top-20 features selected in-fold",
@@ -225,8 +231,9 @@ def per_unit_tests(df, metric="f1_macro", rope=ROPE_F1):
                             mean_diff=d.mean(), std_diff=d.std(ddof=1), wins=int((d > 0).sum()),
                             corrected_t=t, p_corrected=p, p_worse=pl, p_rope=pm, p_better=pr))
     out = pd.DataFrame(out)
-    if not out.empty:       # Holm over the comparisons with the baseline within each task
-        out["p_holm"] = out.groupby(["dataset", "feature_mode", "unit"]).p_corrected.transform(
+    if not out.empty:       # Holm over the comparisons with the baseline within each task and family
+        out["family"] = np.where(out.config.isin(SUPPLEMENTARY), "supplementary", "main")
+        out["p_holm"] = out.groupby(["dataset", "feature_mode", "unit", "family"]).p_corrected.transform(
             lambda p: holm(p.fillna(1).values))
     return out
 
@@ -313,8 +320,8 @@ def figures(summary, df, par):
     os.makedirs(os.path.join(OUT, "figures"), exist_ok=True)
     colors = dict(original="#4C72B0", split10="#DD8452", split_grid="#A0522D", lgbm="#937860", bigfeat="#55A868", bigfeat_raw="#64B5CD",
                   tpot="#C44E52", both="#8172B2", both_raw="#B5559A",
-                  bigfeat_auto="#555555", tpot_auto="#A68A00")
-    markers = dict(original="o", split10="v", split_grid="<", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*", bigfeat_auto="p", tpot_auto="h")
+                  bigfeat_auto="#555555", tpot_auto="#A68A00", lgbm_cv="#6B4F3A", flaml="#2F8F8F")
+    markers = dict(original="o", split10="v", split_grid="<", lgbm="P", bigfeat="s", bigfeat_raw="X", tpot="^", both="D", both_raw="*", bigfeat_auto="p", tpot_auto="h", lgbm_cv="d", flaml="8")
     for (ds, fm), sub in summary.groupby(["dataset", "feature_mode"]):
         pf = par[(par.dataset == ds) & (par.feature_mode == fm)].set_index(["unit", "config"])
         fig, ax = plt.subplots(figsize=(9.6, 4.2))

@@ -1,0 +1,30 @@
+== lgbm_cv
+Thu Nov  5 01:02:35 AM EET 2026
+5 jobs to run
+OK   edgeiiot/all/unitall/seed0/lgbm_cv  F1=0.93363  train=44.6s  total=85s
+OK   edgeiiot/all/unitall/seed1/lgbm_cv  F1=0.93495  train=45.3s  total=85s
+OK   edgeiiot/all/unitall/seed2/lgbm_cv  F1=0.93493  train=44.8s  total=84s
+OK   edgeiiot/all/unitall/seed3/lgbm_cv  F1=0.93178  train=45.0s  total=84s
+OK   edgeiiot/all/unitall/seed4/lgbm_cv  F1=0.93257  train=44.0s  total=82s
+5 jobs to run
+OK   unswnb15/all/unitall/seed1/lgbm_cv  F1=0.64731  train=27.0s  total=57s
+OK   unswnb15/all/unitall/seed0/lgbm_cv  F1=0.64119  train=27.0s  total=57s
+OK   unswnb15/all/unitall/seed2/lgbm_cv  F1=0.64291  train=26.4s  total=55s
+OK   unswnb15/all/unitall/seed3/lgbm_cv  F1=0.63999  train=26.3s  total=55s
+OK   unswnb15/all/unitall/seed4/lgbm_cv  F1=0.64820  train=25.3s  total=54s
+== flaml
+Thu Nov  5 01:09:33 AM EET 2026
+5 jobs to run
+OK   edgeiiot/all/unitall/seed0/flaml  F1=0.93428  train=301.3s  total=304s
+OK   edgeiiot/all/unitall/seed1/flaml  F1=0.93668  train=307.1s  total=330s
+OK   edgeiiot/all/unitall/seed3/flaml  F1=0.93264  train=303.1s  total=320s
+OK   edgeiiot/all/unitall/seed2/flaml  F1=0.93574  train=310.9s  total=362s
+OK   edgeiiot/all/unitall/seed4/flaml  F1=0.93393  train=301.1s  total=305s
+5 jobs to run
+OK   unswnb15/all/unitall/seed0/flaml  F1=0.64136  train=301.3s  total=305s
+OK   unswnb15/all/unitall/seed1/flaml  F1=0.63280  train=307.5s  total=339s
+OK   unswnb15/all/unitall/seed2/flaml  F1=0.65420  train=308.2s  total=337s
+OK   unswnb15/all/unitall/seed3/flaml  F1=0.64457  train=301.1s  total=313s
+OK   unswnb15/all/unitall/seed4/flaml  F1=0.64772  train=301.5s  total=308s
+== done
+Thu Nov  5 01:41:20 AM EET 2026

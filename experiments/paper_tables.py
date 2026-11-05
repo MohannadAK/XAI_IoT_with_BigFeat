@@ -20,15 +20,18 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, "results")
 OUT = os.path.join(RES, "paper_tables.md")
 TASKS = [("nbaiot", "infold20", "N-BaIoT"), ("edgeiiot", "all", "Edge-IIoTset"), ("unswnb15", "all", "UNSW-NB15")]
-ORDER = ["original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto",
-         "tpot_auto"]
+ORDER = ["original", "split10", "split_grid", "lgbm", "lgbm_cv", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw",
+         "bigfeat_auto", "tpot_auto", "flaml"]
 NAME = dict(original="Baseline", split10="ExtraTrees, split 10", split_grid="ExtraTrees, CV grid", lgbm="LightGBM", bigfeat="BigFeat (scaled)",
             bigfeat_raw="BigFeat (unscaled)", tpot="TPOT (ExtraTrees)", both="BigFeat (scaled) + TPOT",
             both_raw="BigFeat (unscaled) + TPOT", bigfeat_auto="BigFeat + model selection",
-            tpot_auto="TPOT, full search")
-AUTOMATED = ["bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto"]
-# Within-family comparison reported alongside the cost to match: TPOT (ExtraTrees) vs ExtraTrees, CV grid
-WITHIN_FAMILY = [("edgeiiot", "tpot", "split_grid"), ("edgeiiot", "tpot", "split10")]
+            tpot_auto="TPOT, full search", lgbm_cv="LightGBM, CV", flaml="FLAML (300 s)")
+AUTOMATED = ["bigfeat", "bigfeat_raw", "tpot", "both", "both_raw", "bigfeat_auto", "tpot_auto", "flaml"]
+# Non-automated configurations that can serve as the match in the cost-to-match table (split10 excluded).
+BASELINES = ["original", "split_grid", "lgbm", "lgbm_cv"]
+# A-posteriori ablation reported alongside the cost to match: TPOT (ExtraTrees) vs ExtraTrees, split 10
+WITHIN_FAMILY = [("edgeiiot", "tpot", "split10")]
+ET_AUTOMATED = ["bigfeat", "bigfeat_raw", "tpot", "both", "both_raw"]
 
 
 def load():
@@ -43,6 +46,24 @@ def load():
     runs["unit"] = runs.unit.astype(str)
     keep = lambda df: pd.concat([df[(df.dataset == ds) & (df.feature_mode == fm)] for ds, fm, _ in TASKS])
     return keep(runs), keep(pd.concat(summ)), keep(pd.concat(unit_tests)), pw
+
+
+def projected_effective_features(ds, fm):
+    """Effective number of features exp(H) of the global SHAP attribution after projection onto the
+    original features (shap_orig in each run's _attr.npz), mean over seeds and, on N-BaIoT, devices."""
+    import glob
+    out = {}
+    for c in ORDER:
+        files = glob.glob(os.path.join(RES, "round*", ds, fm, "unit*", "seed*", f"{c}_attr.npz"))
+        if not files:
+            continue
+        vals = []
+        for f in files:
+            p = np.abs(np.load(f, allow_pickle=True)["shap_orig"].astype(float))
+            p = p[p > 0] / p.sum()
+            vals.append(float(np.exp(-(p * np.log(p)).sum())))
+        out[c] = float(np.mean(vals))
+    return out
 
 
 def md(df):
@@ -123,7 +144,7 @@ def main():
     rows = []
     for ds, c in [("edgeiiot", "tpot"), ("edgeiiot", "split10"), ("edgeiiot", "split_grid"), ("edgeiiot", "both_raw"),
                   ("edgeiiot", "bigfeat_auto"), ("edgeiiot", "tpot_auto"), ("unswnb15", "split_grid"),
-                  ("unswnb15", "bigfeat_auto"), ("unswnb15", "tpot_auto")]:
+                  ("unswnb15", "bigfeat_auto"), ("unswnb15", "tpot_auto"), ("edgeiiot", "flaml"), ("unswnb15", "flaml")]:
         if not has(runs, ds, c):
             continue
         m, w, p = pair(runs, ds, c, "lgbm")
@@ -155,23 +176,62 @@ def main():
     for ds, _, name in TASKS:
         t = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
         for a in [c for c in AUTOMATED if has(runs, ds, c)]:
-            # split10 is excluded as a match: its setting was chosen after inspecting TPOT's selections.
-            for c in sorted([c for c in ORDER if c not in (a, "split10") and c in t.index], key=lambda c: t[c]):
+            # Matches are drawn from the non-automated configurations only; split10 is excluded because its
+            # setting was chosen after inspecting TPOT's selections. If none is "not significantly lower", the
+            # cheapest practically equivalent one (P_ROPE >= 0.95) is reported instead, marked "rope".
+            pool = sorted([c for c in BASELINES if c in t.index], key=lambda c: t[c])
+            tests = {c: diff_test(runs, ds, a, c) for c in pool}
+            match = next((c for c in pool if not (tests[c][0] > 0 and tests[c][1] < 0.05)), None)
+            rule = "not lower"
+            if match is None:
+                match = next((c for c in pool if tests[c][2] >= 0.95), None)
+                rule = "rope"
+            if match is None:
+                continue
+            c = match
+            d, pv, pm, pr = tests[c]
+            cv = f"{t[a] / t['lgbm_cv']:,.0f}x" if c == "lgbm" and "lgbm_cv" in t.index else ""
+            rows.append(dict(dataset=name, automated=NAME[a], matched_by=NAME[c], dF1=f"{d:+.4f}",
+                             p=f"{pv:.3f}", P_auto_better=f"{pr:.2f}", P_rope=f"{pm:.2f}",
+                             time_auto=f"{t[a]:,.1f}", time_match=f"{t[c]:,.1f}",
+                             cost_to_match=f"{t[a] / t[c]:,.0f}x", cost_vs_lgbm_cv=cv, rule=rule))
+    # Within the ExtraTrees family: for every ExtraTrees-based automated configuration on the single-task
+    # datasets, the cheapest non-automated ExtraTrees configuration (baseline or CV grid) whose Macro-F1 is
+    # not significantly lower; plus TPOT vs split 10 on Edge-IIoTset as the a-posteriori ablation.
+    for ds, _, name in TASKS[1:]:
+        t = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
+        for a in [c for c in ET_AUTOMATED if has(runs, ds, c)]:
+            for c in sorted([c for c in ("original", "split_grid") if c in t.index], key=lambda c: t[c]):
                 d, pv, pm, pr = diff_test(runs, ds, a, c)
                 if not (d > 0 and pv < 0.05):
-                    rows.append(dict(dataset=name, automated=NAME[a], matched_by=NAME[c], dF1=f"{d:+.4f}",
-                                     p=f"{pv:.3f}", P_auto_better=f"{pr:.2f}", P_rope=f"{pm:.2f}",
+                    rows.append(dict(dataset=name + " (within ExtraTrees)", automated=NAME[a], matched_by=NAME[c],
+                                     dF1=f"{d:+.4f}", p=f"{pv:.3f}", P_auto_better=f"{pr:.2f}", P_rope=f"{pm:.2f}",
                                      time_auto=f"{t[a]:,.1f}", time_match=f"{t[c]:,.1f}",
                                      cost_to_match=f"{t[a] / t[c]:,.0f}x"))
                     break
     for ds, a, c in WITHIN_FAMILY:
         t = summ[summ.dataset == ds].groupby("config").train_time_s__mean.mean()
         d, pv, pm, pr = diff_test(runs, ds, a, c)
-        rows.append(dict(dataset=ds + " (within ExtraTrees)", automated=NAME[a], matched_by=NAME[c], dF1=f"{d:+.4f}",
+        rows.append(dict(dataset=ds + " (ablation)", automated=NAME[a], matched_by=NAME[c], dF1=f"{d:+.4f}",
                          p=f"{pv:.3f}", P_auto_better=f"{pr:.2f}", P_rope=f"{pm:.2f}", time_auto=f"{t[a]:,.1f}",
                          time_match=f"{t[c]:,.1f}", cost_to_match=f"{t[a] / t[c]:,.0f}x"))
     out += ["## Cost to match (dF1 = automated - matching configuration; p uncorrected)", "",
             md(pd.DataFrame(rows)), ""]
+
+    # Detection details for the single-task datasets: across-seed SD of the difference, uncorrected and
+    # Holm-corrected p, and Bayesian posteriors (ROPE +-0.005)
+    det = ut[(ut.dataset != "nbaiot") & (ut.metric == "f1_macro")]
+    rows = []
+    for ds, _, name in TASKS[1:]:
+        for c in [c for c in ORDER if c != "original"]:
+            r = det[(det.dataset == ds) & (det.config == c)]
+            if r.empty:
+                continue
+            r = r.iloc[0]
+            rows.append(dict(dataset=name, configuration=NAME[c], dF1=f"{r.mean_diff:+.4f}", sd=f"{r.std_diff:.4f}",
+                             wins=f"{int(r.wins)}/5", p=f"{r.p_corrected:.3f}", p_Holm=f"{r.p_holm:.3f}",
+                             P_worse=f"{r.p_worse:.2f}", P_rope=f"{r.p_rope:.2f}", P_better=f"{r.p_better:.2f}"))
+    out += ["## Detection details (difference to the baseline over 5 seeds)", "", md(pd.DataFrame(rows)), ""]
 
     # Explanation quality
     cols = dict(agree_shap_pfi_tau__mean="tau_SHAP_PFI", faithfulness_corr__mean="faithfulness",
@@ -179,10 +239,12 @@ def main():
                 seed_stability_tau="stability", effective_n_features__mean="effective_features",
                 generated_share__mean="generated_share")
     rows = []
-    for ds, _, name in TASKS:
+    for ds, fm, name in TASKS:
         s = summ[summ.dataset == ds].groupby("config")[list(cols)].mean()
+        proj = projected_effective_features(ds, fm)
         for c in [c for c in ORDER if c in s.index]:
-            rows.append(dict(dataset=name, configuration=NAME[c], **{v: round(s.loc[c, k], 3) for k, v in cols.items()}))
+            rows.append(dict(dataset=name, configuration=NAME[c], **{v: round(s.loc[c, k], 3) for k, v in cols.items()},
+                             effective_features_original=round(proj.get(c, np.nan), 3)))
     xt = ut[(ut.dataset != "nbaiot") & ut.metric.isin(["agree_shap_pfi_tau", "faithfulness_corr"])][
         ["dataset", "config", "metric", "mean_diff", "p_holm"]].round(4)
     nb = pw[(pw.dataset == "nbaiot") & (pw.feature_mode == "infold20") & pw.metric.isin(
@@ -190,6 +252,20 @@ def main():
     out += ["## Explanation quality", "", md(pd.DataFrame(rows)), "",
             "Tests against the baseline (Edge-IIoTset, UNSW-NB15: corrected t-test, Holm):", "", md(xt), "",
             "N-BaIoT (Wilcoxon over devices, Holm):", "", md(nb.round(4)), ""]
+
+    # N-BaIoT with all 115 features (appendix): Wilcoxon and Bayesian signed-rank over the nine devices
+    allp = pw[(pw.dataset == "nbaiot") & (pw.feature_mode == "all") & (pw.metric == "f1_macro")].set_index("config")
+    sa = pd.concat([pd.read_csv(os.path.join(RES, "round2", "summary", "summary_by_unit_config.csv"))])
+    sa = sa[(sa.dataset == "nbaiot") & (sa.feature_mode == "all")].groupby("config")
+    f1a, ta = sa.f1_macro__mean.mean(), sa.train_time_s__mean.mean()
+    rows = [dict(configuration=NAME[c], F1=f"{f1a[c]:.5f}",
+                 dF1="" if c == "original" else f"{allp.loc[c, 'mean_diff']:+.5f}",
+                 p_Holm="" if c == "original" else f"{allp.loc[c, 'wilcoxon_p_holm']:.3f}",
+                 P_rope="" if c == "original" else f"{allp.loc[c, 'p_rope']:.2f}",
+                 time_s=f"{ta[c]:,.1f}", ratio=f"{ta[c] / ta['original']:.1f}")
+            for c in ORDER if c in f1a.index]
+    out += ["## N-BaIoT, all 115 features (mean over 9 devices; Wilcoxon over devices, Holm)", "",
+            md(pd.DataFrame(rows)), ""]
 
     open(OUT, "w").write("\n".join(out))
     print("\n".join(out))

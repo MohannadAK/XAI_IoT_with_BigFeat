@@ -28,6 +28,10 @@ Configurations
                Forest or Logistic Regression, by 3-fold CV macro-F1 on the training split)
     tpot_auto : TPOT's default, unrestricted search space ("linear": scaler -> selector -> transformer
                -> classifier, over 17 model families), original features. TPOT decides on scaling.
+    lgbm_cv  : LightGBM with max_delta_step chosen from {0, 1} by 3-fold CV macro-F1 on the training split
+               (the independent counterpart of lgbm, whose max_delta_step=1 was set after seeing divergence)
+    flaml    : FLAML AutoML (low-cost search over LightGBM, random forest, XGBoost, ExtraTrees, linear
+               models) with its default settings, macro-F1 metric, one thread and a fixed time budget
 
 Why scaling is off: scikit-learn's tree splitter treats feature values closer than 1e-7 as equal
 (FEATURE_THRESHOLD). Min-max scaling columns with huge ranges (e.g. TCP ack numbers up to 2.1e9)
@@ -62,7 +66,7 @@ BIGFEAT_PATH = os.environ.get("BIGFEAT_PATH", "/mnt/Projects/BigFeat")
 if BIGFEAT_PATH not in sys.path:
     sys.path.insert(0, BIGFEAT_PATH)
 
-CONFIGS = ("original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw",
+CONFIGS = ("lgbm_cv", "flaml", "original", "split10", "split_grid", "lgbm", "bigfeat", "bigfeat_raw", "tpot", "both", "both_raw",
            "bigfeat_auto", "tpot_auto")
 # split_grid: a small manual grid that a practitioner would try, chosen without TPOT's help.
 SPLIT_GRID = (2, 5, 10, 20)
@@ -74,6 +78,9 @@ NEEDS_SCALING = set()
 # separable; Edge-IIoTset Macro-F1 fell to 0.18-0.36 on 3 of 5 seeds). max_delta_step caps each tree's
 # leaf output and is the single stabilising setting used here.
 LGBM_PARAMS = dict(n_jobs=1, verbose=-1, max_delta_step=1.0)
+LGBM_CV_GRID = (0.0, 1.0)            # max_delta_step values for lgbm_cv (0 = LightGBM's default, no limit)
+# FLAML: defaults (estimator list, evaluation method, search strategy), macro-F1, one thread.
+FLAML_PARAMS = dict(task="classification", metric="macro_f1", time_budget=300, n_jobs=1, verbose=0)
 
 # Same settings as the manuscript (Experimental setup, Pipeline Configurations).
 ET_PARAMS = dict(n_estimators=300, n_jobs=1)
@@ -243,6 +250,8 @@ def model_output(model, X, space):
         return model.predict_proba(X)
     if type(model).__name__ == "LGBMClassifier":
         out = model.predict(X, raw_score=True)
+    elif type(model).__name__ == "XGBClassifier":
+        out = model.predict(X, output_margin=True)
     else:
         out = model.decision_function(X)
     out = np.asarray(out)
@@ -487,6 +496,26 @@ def run_one(task: Task, seed: int, config: str, out_dir: str, load_fn):
         res["tpot_model"] = type(model.steps[-1][1] if isinstance(model, Pipeline) else model).__name__
     elif config == "bigfeat_auto":
         model, res["bigfeat_model"], res["bigfeat_model_cv"] = bigfeat_select_model(X_tr_m, y_tr, seed)
+    elif config == "lgbm_cv":
+        from lightgbm import LGBMClassifier
+        from sklearn.model_selection import GridSearchCV, StratifiedKFold
+        base = {k: v for k, v in LGBM_PARAMS.items() if k != "max_delta_step"}
+        gs = GridSearchCV(LGBMClassifier(random_state=seed, **base), {"max_delta_step": list(LGBM_CV_GRID)},
+                          scoring="f1_macro", n_jobs=1, refit=True,
+                          cv=StratifiedKFold(3, shuffle=True, random_state=seed)).fit(X_tr_m, y_tr)
+        model = gs.best_estimator_
+        res["lgbm_cv_choice"] = float(gs.best_params_["max_delta_step"])
+        res["lgbm_cv_scores"] = {str(v): float(m) for v, m in zip(LGBM_CV_GRID, gs.cv_results_["mean_test_score"])}
+    elif config == "flaml":
+        from flaml import AutoML
+        automl = AutoML()
+        automl.fit(X_tr_m, y_tr, seed=seed, **FLAML_PARAMS)
+        model = automl.model.estimator    # the fitted final model; predicts exactly as automl does
+        res["flaml_estimator"] = automl.best_estimator
+        res["flaml_config"] = {k: (float(v) if isinstance(v, (np.floating, float)) else v)
+                               for k, v in automl.best_config.items()}
+        res["flaml_trials"] = len(automl.config_history)
+        res["flaml_model"] = type(model).__name__
     elif config == "lgbm":
         from lightgbm import LGBMClassifier
         model = LGBMClassifier(random_state=seed, **LGBM_PARAMS).fit(X_tr_m, y_tr)
